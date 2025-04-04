@@ -1,0 +1,21 @@
+RewriteEngine On
+
+# Redirigir a login.html antes de cualquier otra cosa
+RewriteRule ^login$ /login.html [L]
+
+# Excluir archivos estáticos (JS, CSS, imágenes, vídeos, fuentes)
+RewriteCond %{REQUEST_URI} !\.(js|css|png|jpg|jpeg|gif|svg|mp4|webm|ogg|mp3|wav|woff|woff2|ttf|eot)$ [NC]
+
+# Redirigir /player/slug a player.html
+RewriteRule ^player/([^/]+)$ /player.html [L,QSA]
+
+# Redirigir /account a account.html
+RewriteRule ^account$ /account.html [L,QSA]
+
+# Redirigir todo lo demás a show.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ /show.html [L]
+
+
+

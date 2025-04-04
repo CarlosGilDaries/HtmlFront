@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+@import 'commons.css';
+@import 'banner.css';
+@import 'nav.css';
+@import 'footer.css';
+
+video {
+    width: 100%;
+    height: 80vh;
+    object-fit: cover;
+    position: absolute;
+}
+
+.index-main {
+    padding-block: 2px;
+    background-color: black;
+    color: white;
+}
+
+.content-type {
+    width: 95%;
+    margin-inline: auto;
+    margin-bottom: 20px;
+}
+
+.content-type h2 {
+    padding: 20px;
+}
+
+.content-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.content-container {
+    overflow-x: auto;
+    display: flex;
+    gap: 12px;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Oculta la barra de desplazamiento en Firefox */
+}
+
+.content-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.scroll-left, .scroll-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 34px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.scroll-left {
+    left: 0px;
+}
+
+.scroll-right {
+    right: 0px;
+}
+
+.scroll-left:hover, .scroll-right:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.hidden {
+    display: none;
+}
+
+.content {
+    min-width: 435px;
+    max-width: 435px;
+    height: auto;
+}
+
+.content img {
+    border-radius: 10px;
+}
