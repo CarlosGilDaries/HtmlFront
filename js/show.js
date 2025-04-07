@@ -1,3 +1,5 @@
+import { getIp } from './modules/getIp.js';
+
 const pathParts = window.location.pathname.split('/');
 const movieSlug = pathParts[pathParts.length - 1]; // Extraer el último segmento de la URL
 const api = 'http://streaming.test/api/content/' + movieSlug;
@@ -8,6 +10,15 @@ const token = localStorage.getItem('auth_token');
 if (token == null) {
   window.location.href = '/login';
 }
+const user_id = localStorage.getItem('current_user_id');
+const user = localStorage.getItem('user_' + user_id);
+const device_id = localStorage.getItem('device_id_' + user_id);
+const ip = await getIp();
+const userAgent = navigator.userAgent;
+
+if (token == null || device_id == null) {
+  window.location.href = '/login';
+}
 
 // Función asincrónica que maneja la solicitud
 async function fetchMovieData() {
@@ -16,7 +27,11 @@ async function fetchMovieData() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // Aquí envías el token en los encabezados
+        'User-Device-ID': device_id,
+        'User-Ip': ip,
+        'User-Agent': userAgent,
+        Authorization: `Bearer ${token}`,
+        'User-Id': user_id,
       },
     });
 
@@ -37,9 +52,7 @@ async function fetchMovieData() {
     }
   } catch (error) {
     console.error('Error en la solicitud: ', error);
-    window.location.href = '/login';
   }
 }
 
-// Llamar a la función asincrónica
 fetchMovieData();

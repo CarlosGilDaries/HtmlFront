@@ -1,14 +1,19 @@
+import { getIp } from './modules/getIp.js';
+
 document
   .getElementById('new-device-form')
   .addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const deviceName = document.getElementById('device_name').value;
-    const deviceId = localStorage.getItem('device_id');
     const ip = await getIp();
     const userAgent = navigator.userAgent;
-    let user = localStorage.getItem('user');
-    let userObject = JSON.parse(user);
+    const user_id = localStorage.getItem('current_user_id');
+    const user = localStorage.getItem('user_' + user_id);
+    const userObject = JSON.parse(user);
+    const deviceKey = `device_id_${userObject.id}`;
+    const deviceId = localStorage.getItem(deviceKey) || generateUUID();
+    localStorage.setItem(deviceKey, deviceId);
 
     if (!deviceName || !deviceId || !ip || !userAgent) {
       alert('Por favor, complete todos los campos.');
@@ -44,14 +49,11 @@ document
     }
   });
 
-// Función para obtener la IP del cliente usando un servicio de API externo
-async function getIp() {
-  try {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip;
-  } catch (error) {
-    console.error('Error al obtener IP:', error);
-    return '';
-  }
+// Función para generar un device_id único
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }

@@ -6,17 +6,18 @@ document
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const ip = await getIp();
-    const device_id = localStorage.getItem('device_id') || generateUUID();
     const userAgent = navigator.userAgent;
+    const user_id = getUserIdByEmail(email);
+    const device_id = localStorage.getItem('device_id_' + user_id);
 
     try {
       const response = await fetch('http://streaming.test/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'User-Device-ID': device_id,
           'User-Agent': userAgent,
           'User-IP': ip,
+          'User-Device-id': device_id,
         },
         body: JSON.stringify({
           email,
@@ -27,8 +28,8 @@ document
       const data = await response.json();
 
       localStorage.setItem('auth_token', data.data.auth_token);
-      localStorage.setItem('user', JSON.stringify(data.data.user));
-      localStorage.setItem('device_id', device_id);
+      localStorage.setItem('user_' + data.data.user.id, JSON.stringify(data.data.user));
+      localStorage.setItem('current_user_id', data.data.user.id);
 
       if (!data.success) {
         if (data.device_limit_reached) {
@@ -54,14 +55,6 @@ document
     }
   });
 
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
 // Función para obtener la IP del cliente usando un servicio de API externo
 async function getIp() {
   try {
@@ -72,4 +65,25 @@ async function getIp() {
     console.error('Error al obtener IP:', error);
     return '';
   }
+}
+
+// Función para obtener el id del email que se está logeando
+function getUserIdByEmail(emailToCheck) {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+
+    if (key.startsWith('user_')) {
+      try {
+        const user = JSON.parse(localStorage.getItem(key));
+
+        if (user.email === emailToCheck) {
+          return user.id;
+        }
+      } catch (error) {
+        console.error(`Error leyendo el valor de ${key}:`, error);
+      }
+    }
+  }
+
+  return null; 
 }

@@ -1,10 +1,11 @@
-const userCookie = JSON.parse(localStorage.getItem('user'));
+const user_id = localStorage.getItem('current_user_id');
+const user = JSON.parse(localStorage.getItem('user_' + user_id));
 const token = localStorage.getItem('auth_token');
 if (token == null) {
     window.location.href = '/login';
 }
 
-if (userCookie) {
+if (user) {
   const tableBody = document
     .getElementById('user-table')
     .getElementsByTagName('tbody')[0];
@@ -19,7 +20,7 @@ if (userCookie) {
   };
 
   // Filtrar los datos para que solo se muestren los campos relevantes
-  for (const [key, value] of Object.entries(userCookie)) {
+  for (const [key, value] of Object.entries(user)) {
     // Excluir los campos no deseados
     if (!['email_verified_at', 'created_at', 'updated_at'].includes(key)) {
       if (fieldsToDisplay[key]) {
@@ -37,37 +38,36 @@ if (userCookie) {
 }
 
 
-document
-  .getElementById('logout-button')
-  .addEventListener('click', async function (event) {
-    event.preventDefault();
+document.getElementById('logout-button').addEventListener('click', async function (event) {
+  event.preventDefault();
 
-    const token = localStorage.getItem('auth_token');
-    if (!token) {
-      console.error('No se encontró el token de autenticación');
-      return;
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    console.error('No se encontró el token de autenticación');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://streaming.test/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('current_user_id');
+
+      window.location.href = 'http://frontend.test';
+    } else {
+      console.error('Error al cerrar sesión:', data.message);
     }
+  } catch (error) {
+    console.error('Error en la solicitud de logout:', error);
+  }
+});
 
-    try {
-      const response = await fetch('http://streaming.test/api/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user');
-
-        window.location.href = 'http://frontend.test';
-      } else {
-        console.error('Error al cerrar sesión:', data.message);
-      }
-    } catch (error) {
-      console.error('Error en la solicitud de logout:', error);
-    }
-  });
