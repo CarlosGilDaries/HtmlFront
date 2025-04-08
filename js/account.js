@@ -1,42 +1,64 @@
-const user_id = localStorage.getItem('current_user_id');
-const user = JSON.parse(localStorage.getItem('user_' + user_id));
+import { logOut } from "./modules/logOut.js";
+
 const token = localStorage.getItem('auth_token');
+const button = document.querySelector('.select-plan');
+const user_id = localStorage.getItem('current_user_id');
+const device_id = localStorage.getItem('device_id_' + user_id);
+
 if (token == null) {
     window.location.href = '/login';
 }
 
-if (user) {
-  const tableBody = document
-    .getElementById('user-table')
-    .getElementsByTagName('tbody')[0];
-
-  // Definir los campos que quieres mostrar
-  const fieldsToDisplay = {
-    id: 'ID',
-    name: 'Nombre',
-    email: 'Correo electrónico',
-    plan: 'Plan',
-    rol: 'Rol',
-  };
-
-  // Filtrar los datos para que solo se muestren los campos relevantes
-  for (const [key, value] of Object.entries(user)) {
-    // Excluir los campos no deseados
-    if (!['email_verified_at', 'created_at', 'updated_at'].includes(key)) {
-      if (fieldsToDisplay[key]) {
-        // Solo mostrar los campos que están en fieldsToDisplay
-        const row = tableBody.insertRow();
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-
-        // Asignar el nombre de la columna en español
-        cell1.textContent = fieldsToDisplay[key];
-        cell2.textContent = value;
-      }
-    }
-  }
+if (device_id == null) {
+  logOut(token);
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  fetch('https://streaming.test/api/user', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        const user = data.user;
+
+        if (user) {
+          const tableBody = document
+            .getElementById('user-table')
+            .getElementsByTagName('tbody')[0];
+
+          // Definir los campos que quieres mostrar
+          const fieldsToDisplay = {
+            id: 'ID',
+            name: 'Nombre',
+            email: 'Correo electrónico',
+            plan: 'Plan',
+            rol: 'Rol',
+          };
+
+          // Filtrar los datos para que solo se muestren los campos relevantes
+          for (const [key, value] of Object.entries(user)) {
+            // Excluir los campos no deseados
+            if (!['email_verified_at', 'created_at', 'updated_at'].includes(key)) {
+              if (fieldsToDisplay[key]) {
+                // Solo mostrar los campos que están en fieldsToDisplay
+                const row = tableBody.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+
+                // Asignar el nombre de la columna en español
+                cell1.textContent = fieldsToDisplay[key];
+                cell2.textContent = value;
+              }
+            }
+          }
+        }
+      }
+    });
+});
 
 document.getElementById('logout-button').addEventListener('click', async function (event) {
   event.preventDefault();
@@ -47,27 +69,10 @@ document.getElementById('logout-button').addEventListener('click', async functio
     return;
   }
 
-  try {
-    const response = await fetch('http://streaming.test/api/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('current_user_id');
-
-      window.location.href = 'http://frontend.test';
-    } else {
-      console.error('Error al cerrar sesión:', data.message);
-    }
-  } catch (error) {
-    console.error('Error en la solicitud de logout:', error);
-  }
+  logOut(token);
 });
+
+button.addEventListener('click', function () {
+  window.location.href = '/change-plan.html';
+})
 

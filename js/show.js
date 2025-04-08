@@ -1,9 +1,10 @@
 import { getIp } from './modules/getIp.js';
+import { logOut } from './modules/logOut.js';
 
 const pathParts = window.location.pathname.split('/');
 const movieSlug = pathParts[pathParts.length - 1]; // Extraer el último segmento de la URL
-const api = 'http://streaming.test/api/content/' + movieSlug;
-const backendURL = 'http://streaming.test';
+const api = 'https://streaming.test/api/content/' + movieSlug;
+const backendURL = 'https://streaming.test';
 const play = document.getElementById('play-button');
 const token = localStorage.getItem('auth_token');
 
@@ -16,8 +17,8 @@ const device_id = localStorage.getItem('device_id_' + user_id);
 const ip = await getIp();
 const userAgent = navigator.userAgent;
 
-if (token == null || device_id == null) {
-  window.location.href = '/login';
+if (device_id == null) {
+  logOut(token);
 }
 
 // Función asincrónica que maneja la solicitud

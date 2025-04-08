@@ -1,5 +1,14 @@
-const api = 'http://streaming.test/api/content';
-let backendURL = 'http://streaming.test';
+import { logOut } from './modules/logOut.js';
+
+const api = 'https://streaming.test/api/content';
+const backendURL = 'https://streaming.test';
+const user_id = localStorage.getItem('current_user_id');
+const device_id = localStorage.getItem('device_id_' + user_id);
+const tokenn = localStorage.getItem('auth_token');
+
+if (device_id == null) {
+  logOut(tokenn);
+}
 
 fetch(api)
   .then((response) => response.json())
@@ -95,7 +104,10 @@ function addScrollFunctionality(container) {
 
   function updateArrows() {
     leftArrow.classList.toggle('hidden', container.scrollLeft <= 0);
-    rightArrow.classList.toggle('hidden', container.scrollLeft + container.clientWidth >= container.scrollWidth);
+    rightArrow.classList.toggle(
+      'hidden',
+      container.scrollLeft + container.clientWidth >= container.scrollWidth
+    );
   }
 
   leftArrow.addEventListener('click', () => {
@@ -138,4 +150,3 @@ function getFileURL(coverPath) {
 
   return backendURL + route + cleanedPath;
 }
-

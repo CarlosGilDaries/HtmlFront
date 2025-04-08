@@ -1,4 +1,5 @@
 import { getIp } from './modules/getIp.js';
+import { generateUUID } from './modules/generateId.js';
 
 document
   .getElementById('new-device-form')
@@ -15,13 +16,8 @@ document
     const deviceId = localStorage.getItem(deviceKey) || generateUUID();
     localStorage.setItem(deviceKey, deviceId);
 
-    if (!deviceName || !deviceId || !ip || !userAgent) {
-      alert('Por favor, complete todos los campos.');
-      return;
-    }
-
     try {
-      const response = await fetch('http://streaming.test/api/new-device', {
+      const response = await fetch('https://streaming.test/api/new-device', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +35,7 @@ document
       const data = await response.json();
 
       if (data.success) {
-        window.location.href = 'http://frontend.test';
+        window.location.href = 'https://frontend.test';
       } else {
         alert('Error al registrar dispositivo: ' + data.message);
       }
@@ -48,12 +44,3 @@ document
       alert('Hubo un error al conectar con el servidor');
     }
   });
-
-// Función para generar un device_id único
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}

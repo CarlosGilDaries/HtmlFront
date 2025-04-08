@@ -1,9 +1,10 @@
 import { getIp } from './modules/getIp.js';
+import { logOut } from './modules/logOut.js';
 
 const pathParts = window.location.pathname.split('/');
 const movieSlug = pathParts[pathParts.length - 1]; // Extraer el último segmento de la URL
-const api = 'http://streaming.test/api/content/' + movieSlug;
-const backendURL = 'http://streaming.test';
+const api = 'https://streaming.test/api/content/' + movieSlug;
+const backendURL = 'https://streaming.test';
 const player = videojs('my-video');
 const play = document.getElementById('play-button');
 const token = localStorage.getItem('auth_token');
@@ -11,16 +12,15 @@ const token = localStorage.getItem('auth_token');
 if (token == null) {
   window.location.href = '/login';
 }
+
 const user_id = localStorage.getItem('current_user_id');
 const user = localStorage.getItem('user_' + user_id);
 const device_id = localStorage.getItem('device_id_' + user_id);
 const ip = await getIp();
 const userAgent = navigator.userAgent;
 
-if (token == null || device_id == null) {
-  console.log(token);
-  console.log(device_id);
-  //window.location.href = '/login';
+if (device_id == null) {
+  logOut(token);
 }
 
 fetch(api, {
@@ -62,6 +62,10 @@ fetch(api, {
   .catch((error) => {
     console.error('Error en la solicitud: ', error);
   });
+
+document.addEventListener('contextmenu', function (event) {
+  event.preventDefault();
+})
 
 document.addEventListener('keydown', function (event) {
   if (

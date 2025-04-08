@@ -11,13 +11,13 @@ document
     const device_id = localStorage.getItem('device_id_' + user_id);
 
     try {
-      const response = await fetch('http://streaming.test/api/login', {
+      const response = await fetch('https://streaming.test/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': userAgent,
           'User-IP': ip,
-          'User-Device-id': device_id,
+          'User-Device-Id': device_id,
         },
         body: JSON.stringify({
           email,
@@ -26,6 +26,8 @@ document
       });
 
       const data = await response.json();
+
+      console.log(data);
 
       localStorage.setItem('auth_token', data.data.auth_token);
       localStorage.setItem('user_' + data.data.user.id, JSON.stringify(data.data.user));
@@ -45,7 +47,7 @@ document
       if (data.data.require_device_registration) {
         window.location.href = '/new-device.html';
       } else {
-        window.location.href = 'http://frontend.test';
+        window.location.href = 'https://frontend.test';
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
