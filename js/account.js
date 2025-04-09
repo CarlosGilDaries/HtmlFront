@@ -42,7 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
           // Filtrar los datos para que solo se muestren los campos relevantes
           for (const [key, value] of Object.entries(user)) {
             // Excluir los campos no deseados
-            if (!['email_verified_at', 'created_at', 'updated_at'].includes(key)) {
+            if (
+              !['email_verified_at', 'created_at', 'updated_at'].includes(key)
+            ) {
               if (fieldsToDisplay[key]) {
                 // Solo mostrar los campos que están en fieldsToDisplay
                 const row = tableBody.insertRow();
@@ -57,6 +59,11 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }
       }
+    })
+    .catch((error) => {
+      alert('Error en la solicitud: ', error);
+      localStorage.removeItem('auth_token');
+      window.location.href = '/login';
     });
 });
 

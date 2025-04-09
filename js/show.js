@@ -52,7 +52,9 @@ async function fetchMovieData() {
       console.error('Error al consultar la API: ', data.message);
     }
   } catch (error) {
-    console.error('Error en la solicitud: ', error);
+    alert('Error en la solicitud: ', error);
+    localStorage.removeItem('auth_token');
+    window.location.href = '/login';
   }
 }
 

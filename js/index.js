@@ -26,7 +26,9 @@ fetch(api)
       console.error('Error al consultar la API: ', data.message);
     }
   })
-  .catch((error) => console.error('Error en la solicitud: ', error));
+  .catch((error) => {
+    console.error('Error en la solicitud: ', error);
+  });
 
 function getAudioContent(data, node) {
   const audios = new Set();
@@ -139,14 +141,3 @@ document.addEventListener('DOMContentLoaded', async function () {
     navRight.appendChild(loginButton);
   }
 });
-
-function getFileURL(coverPath) {
-  const extension = coverPath.split('.').pop().toLowerCase();
-  const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(extension);
-
-  const route = isImage ? '/file/images/' : '/file/protected/';
-  // Asegúrate de quitar el prefijo '/file/' si ya venía así desde la API
-  const cleanedPath = coverPath.replace(/^\/?file\//, '');
-
-  return backendURL + route + cleanedPath;
-}

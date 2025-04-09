@@ -99,6 +99,5 @@ async function handleDeleteDevice(deviceId) {
     }
   } catch (error) {
     console.error('Error:', error);
-    alert('Error al eliminar dispositivo: ' + error.message);
   }
 }
