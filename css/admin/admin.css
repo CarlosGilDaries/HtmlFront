@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+@import '/css/commons.css';
+@import '/css/nav.css';
+@import '/css/footer.css';
+
+.menu {
+  width: 100%;
+  padding-inline: 60px;
+  background-color: black;
+}
+
+main {
+    margin-bottom: 20px;
+}
+        
+.admin-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.admin-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid #e1e1e1;
+    width: 33%;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.admin-card h3 {
+    margin: 0;
+    color: #1a1a2e;
+    font-size: 1.2rem;
+}
+
+.admin-card i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #e94560;
+}

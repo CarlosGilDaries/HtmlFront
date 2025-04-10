@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     const data = await response.json();
-    console.log('Datos recibidos:', data); // Para depuración
 
     if (data.success) {
       renderDevices(data.devices);

@@ -18,7 +18,7 @@ async function initStream() {
         const data = await response.json();
 
         if (data.stream_limit_reached) {
-            window.location.href = '/stream-limit-reached.html';
+            window.location.href = '/stream-limit';
             return;
         }
 

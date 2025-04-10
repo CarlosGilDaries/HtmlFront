@@ -1,14 +1,63 @@
 import { logOut } from './modules/logOut.js';
+import { getAudioContent } from './modules/getAudioContent.js';
+import { getVideoContent } from './modules/getVideoContent.js';
+import { addScrollFunctionality } from './modules/addScrollFunctionality.js';
 
 const api = 'https://streaming.test/api/content';
 const backendURL = 'https://streaming.test';
 const user_id = localStorage.getItem('current_user_id');
 const device_id = localStorage.getItem('device_id_' + user_id);
-const tokenn = localStorage.getItem('auth_token');
+const token = localStorage.getItem('auth_token');
 
-if (device_id == null) {
-  logOut(tokenn);
+document.addEventListener('DOMContentLoaded', function () {
+  const menu = document.querySelector('.menu');
+
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 1) {
+      // Si se ha hecho scroll hacia abajo
+      menu.classList.add('scrolled');
+    } else {
+      menu.classList.remove('scrolled');
+    }
+  });
+});
+
+if (device_id == null && token != null) {
+  logOut(token);
 }
+
+ const allKeys = Object.keys(localStorage);
+ const deviceIds = allKeys
+   .filter((key) => key.startsWith('device_id_'))
+  .map((key) => localStorage.getItem(key));
+
+if (deviceIds.length != 0 && token != null) {
+  try {
+    const response = await fetch('https://streaming.test/api/check-device-id', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'User-Device-Id': deviceIds.join(','),
+      },
+    });
+
+    const idsData = await response.json();
+
+    if (idsData.has_missing) {
+      const deviceIdKeys = allKeys.filter((key) => key.startsWith('device_id_'));
+      deviceIdKeys.forEach((key) => {
+        const value = localStorage.getItem(key);
+        if (idsData.missing_device_ids.includes(value)) {
+          localStorage.removeItem(key);
+          console.log(`Eliminado: ${key} con valor ${value}`);
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
 
 fetch(api)
   .then((response) => response.json())
@@ -17,8 +66,8 @@ fetch(api)
       const audio = document.getElementById('audio-content');
       const video = document.getElementById('video-content');
 
-      getAudioContent(data, audio);
-      getVideoContent(data, video);
+      getAudioContent(data, audio, backendURL);
+      getVideoContent(data, video, backendURL);
 
       addScrollFunctionality(audio);
       addScrollFunctionality(video);
@@ -30,110 +79,11 @@ fetch(api)
     console.error('Error en la solicitud: ', error);
   });
 
-function getAudioContent(data, node) {
-  const audios = new Set();
-
-  data.data.forEach((element) => {
-    if (element.type == 'audio/mp3') {
-      audios.add(element);
-    }
-  });
-
-  audios.forEach((audio) => {
-    const article = document.createElement('article');
-    article.classList.add('content');
-
-    const link = document.createElement('a');
-    link.href = `/${audio.slug}`;
-
-    const img = document.createElement('img');
-    img.src = backendURL + audio.cover;
-
-    link.append(img);
-    article.append(link);
-    node.append(article);
-  });
-
-  return audios;
-}
-
-function getVideoContent(data, node) {
-  const videos = new Set();
-
-  data.data.forEach((element) => {
-    if (element.type != 'audio/mp3') {
-      videos.add(element);
-    }
-  });
-
-  videos.forEach((video) => {
-    const article = document.createElement('article');
-    article.classList.add('content');
-
-    const link = document.createElement('a');
-    link.href = `/${video.slug}`;
-
-    const img = document.createElement('img');
-    img.src = backendURL + video.cover;
-
-    link.append(img);
-    article.append(link);
-    node.append(article);
-  });
-
-  return videos;
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  const menu = document.querySelector('.menu');
-
-  window.addEventListener('scroll', function () {
-    if (window.scrollY > 0) {
-      console.log('scroll');
-      // Si se ha hecho scroll hacia abajo
-      menu.classList.add('scrolled');
-    } else {
-      menu.classList.remove('scrolled');
-    }
-  });
-});
-
-// Función para agregar funcionalidad de desplazamiento con flechas
-function addScrollFunctionality(container) {
-  const wrapper = container.parentElement;
-  const leftArrow = wrapper.querySelector('.scroll-left');
-  const rightArrow = wrapper.querySelector('.scroll-right');
-
-  function updateArrows() {
-    leftArrow.classList.toggle('hidden', container.scrollLeft <= 0);
-    rightArrow.classList.toggle(
-      'hidden',
-      container.scrollLeft + container.clientWidth >= container.scrollWidth
-    );
-  }
-
-  leftArrow.addEventListener('click', () => {
-    container.scrollBy({ left: -450, behavior: 'smooth' });
-  });
-
-  rightArrow.addEventListener('click', () => {
-    container.scrollBy({ left: 450, behavior: 'smooth' });
-  });
-
-  container.addEventListener('scroll', updateArrows);
-  window.addEventListener('resize', updateArrows);
-
-  updateArrows(); // Inicializa el estado de las flechas
-}
-
-// Verificar si hay un token de autenticación
 document.addEventListener('DOMContentLoaded', async function () {
   const userIcon = document.querySelector('.user');
   const navRight = document.querySelector('.right-nav');
 
-  const token = localStorage.getItem('auth_token');
-
-  if (!token) {
+  if (token == null) {
     if (userIcon) userIcon.remove();
 
     const loginButton = document.createElement('li');
@@ -141,3 +91,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     navRight.appendChild(loginButton);
   }
 });
+
+

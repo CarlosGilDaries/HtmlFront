@@ -27,32 +27,31 @@ document
 
       const data = await response.json();
 
-      console.log(data);
-
       localStorage.setItem('auth_token', data.data.auth_token);
       localStorage.setItem('user_' + data.data.user.id, JSON.stringify(data.data.user));
       localStorage.setItem('current_user_id', data.data.user.id);
 
+      if (data.data.require_device_registration) {
+            window.location.href = '/new-device.html';
+            return;
+          }
+
       if (!data.success) {
         if (data.device_limit_reached) {
-          window.location.href = '/manage-devices.html';
+          window.location.href = '/manage-devices';
         } else if (data.message === 'Credenciales incorrectas') {
-          document.getElementById('error-message').textContent =
-            'Credenciales incorrectas';
+          document.getElementById('error-message').textContent = 'Credenciales incorrectas';
           document.getElementById('error-message').style.display = 'block';
         }
         return;
       }
 
-      if (data.data.require_device_registration) {
-        window.location.href = '/new-device.html';
-      } else {
-        window.location.href = 'https://frontend.test';
-      }
+      window.location.href = '/';
+
     } catch (error) {
       console.error('Error en la solicitud:', error);
       document.getElementById('error-message').textContent =
-        'Error al conectar con el servidor';
+        'Credenciales incorrectas';
       document.getElementById('error-message').style.display = 'block';
     }
   });

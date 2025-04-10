@@ -1,5 +1,5 @@
-@import 'commons.css';
-@import 'footer.css';
+@import '/css/commons.css';
+@import '/css/footer.css';
 
 .menu {
     background-color: #000;

@@ -5,40 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/normalize.css"></link>
-    <link rel="stylesheet" href="/css/index.css"></link>
+    <link rel="stylesheet" href="/css/admin/admin.css"></link>
     <link id="favicon" rel="icon" type="image/png" href="/images/stream-word.png">
-    <link rel="stylesheet" href="/css/login.css">
-    <title>Nuevo Dispositivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Panel de admin</title>
 </head>
 <body>
-
     <div class="menu">
         <nav>
             <ul class="nav left-nav">
                 <li class="logo"><a href="https://frontend.test"><img src="/images/stream-word.png" alt="Streaming logo"></a></li>
             </ul>
         </nav>
+        <nav>
+            <ul class="nav right-nav">
+                <a id="logout-button"><button class="login-btn">Cerrar sesión</button></a>
+            </ul>
+        </nav>
     </div>
 
-    <section>
-        <div class="login-box new-device-box">
-            <form id="new-device-form">
-                <h2>Nuevo dispositivo</h2>
-                <div class="input-box">
-                    <span class="icon">
-                        <ion-icon name="laptop-outline"></ion-icon>
-                    </span>
-                    <input type="text" id="device_name" required>
-                    <label>Nombre del dispostivo</label>
-                </div>
-                <input type="hidden" id="user_id" value="">
-                <input type="hidden" id="device_id" value="">
-                <input type="hidden" id="ip" value="">
-                <input type="hidden" id="userAgent" value="">
-                <button type="submit">Añadir dispositivo</button>
-            </form>
+    <main>
+        <h1 style="text-align: center; color: #1a1a2e;">Panel de Administración</h1>
+        <div class="admin-panel">
+            <a href="/admin/add-content.html" class="admin-card">
+                <i class="fas fa-film"></i>
+                <h3>Añadir Contenido</h3>
+            </a>
+            
+            <a href="/admin/add-ad.html" class="admin-card">
+                <i class="fas fa-ad"></i>
+                <h3>Añadir Anuncio</h3>
+            </a>
+            
+            <a href="/admin/link-ads.html" class="admin-card">
+                <i class="fas fa-link"></i>
+                <h3>Vincular Anuncios a Contenido</h3>
+            </a>
+            
+            <a href="/admin/view-content-with-ads.html" class="admin-card">
+                <i class="fas fa-eye"></i>
+                <h3>Ver contenido CON anuncios</h3>
+            </a>
         </div>
-    </section>
+    </main>
 
     <footer class="footer">
         <div class="footer-container">
@@ -56,8 +65,6 @@
         </div>
     </footer>
 
-    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
-    <script type="module" src="/js/newDevice.js"></script>
+    <script type="module" src="/js/admin/admin.js"></script>
 </body>
 </html>

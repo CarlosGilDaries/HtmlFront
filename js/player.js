@@ -79,9 +79,7 @@ fetch(apiShow, {
     }
   })
   .catch((error) => {
-    alert('Error en la solicitud: ', error);
-    //localStorage.removeItem('auth_token');
-    //window.location.href = '/login';
+    console.error('Error en la solicitud: ', error);
   });
 
 document.addEventListener('contextmenu', function (event) {

@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
-@import 'commons.css';
-@import 'banner.css';
-@import 'nav.css';
-@import 'footer.css';
+@import '/css/commons.css';
+@import '/css/banner.css';
+@import '/css/nav.css';
+@import '/css/footer.css';
 
 video {
     width: 100%;

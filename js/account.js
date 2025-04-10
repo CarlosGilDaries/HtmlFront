@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if (data.success) {
         const user = data.user;
 
+        if (user.rol == 'admin') {
+          button.innerHTML = 'Panel de Admin';
+        }
+
         if (user) {
           const tableBody = document
             .getElementById('user-table')
@@ -58,13 +62,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           }
         }
+
+        button.addEventListener('click', function () {
+          if (user.rol == 'admin') {
+            window.location.href = '/admin/admin-panel.html';
+          } else {
+            window.location.href = '/change-plan.html';
+          } 
+        });
       }
     })
-    .catch((error) => {
-      alert('Error en la solicitud: ', error);
-      localStorage.removeItem('auth_token');
-      window.location.href = '/login';
-    });
+  .catch((error) => {
+    alert('Error en la solicitud: ', error);
+    localStorage.removeItem('auth_token');
+    window.location.href = '/login';
+  });
 });
 
 document.getElementById('logout-button').addEventListener('click', async function (event) {
@@ -78,8 +90,4 @@ document.getElementById('logout-button').addEventListener('click', async functio
 
   logOut(token);
 });
-
-button.addEventListener('click', function () {
-  window.location.href = '/change-plan.html';
-})
 
