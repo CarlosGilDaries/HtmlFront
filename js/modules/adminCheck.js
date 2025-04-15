@@ -8,7 +8,7 @@ export function adminCheck(token) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                const user = data.user;
+                const user = data.data.user;
 
                 if (user.rol != 'admin') {
                     window.location.href = 'https://frontend.test';
@@ -16,8 +16,6 @@ export function adminCheck(token) {
             }
         })
     .catch((error) => {
-        alert('Error en la solicitud: ', error);
-        localStorage.removeItem('auth_token');
-        window.location.href = '/login';
+        console.log(error);
     });
 }

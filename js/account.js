@@ -60,7 +60,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Asignar el nombre de la columna en español
                 cell1.textContent = fieldsToDisplay[key];
-                cell2.textContent = value;
+                if (value == 'man' || value == 'woman' || value == 'non-binary' || value == 'others') {
+                  if (value == 'man') {
+                    cell2.textContent = 'Hombre';
+                  }
+
+                  else if (value == 'woman') {
+                    cell2.textContent = 'Mujer';
+                  }
+                    
+                  else if (value == 'non-binary') {
+                    cell2.textContent = 'No binario';
+                    
+                  } else {
+                      cell2.textContent = 'Sin especificar';
+                    }
+                } else {
+                  cell2.textContent = value;
+                }
               }
             }
           }

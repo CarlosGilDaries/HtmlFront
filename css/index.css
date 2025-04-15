@@ -96,4 +96,6 @@ video {
 
 .content img {
     border-radius: 10px;
+    max-width: 450px;
+    height: auto;
 }

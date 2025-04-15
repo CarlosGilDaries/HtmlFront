@@ -41,6 +41,8 @@ async function fetchMovieData() {
     if (data.success) {
       const image = document.getElementById('content-image');
       const title = document.getElementById('content-title');
+      const trailer = document.getElementById('trailer');
+      trailer.src = backendURL + data.data.movie.trailer;
       image.src = backendURL + data.data.movie.cover;
       title.innerHTML = data.data.movie.title;
       document.title = data.data.movie.title + ' - Streaming';
@@ -53,8 +55,7 @@ async function fetchMovieData() {
     }
   } catch (error) {
     alert('Error en la solicitud: ', error);
-    localStorage.removeItem('auth_token');
-    window.location.href = '/login';
+    console.log(error);
   }
 }
 

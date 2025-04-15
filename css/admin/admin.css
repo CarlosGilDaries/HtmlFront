@@ -11,14 +11,15 @@
 
 main {
     margin-bottom: 20px;
+    height: 75vh;
 }
         
 .admin-panel {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 30px;
-    width: 100%;
+    width: 60%;
+    margin: auto;
 }
 
 .admin-card {
@@ -30,7 +31,7 @@ main {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     border: 1px solid #e1e1e1;
-    width: 33%;
+    width: calc(50% - 30px);
 }
 
 .admin-card:hover {
