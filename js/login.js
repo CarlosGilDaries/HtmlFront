@@ -1,3 +1,5 @@
+import { getIp } from "./modules/getIp.js";
+
 document
   .getElementById('login-form')
   .addEventListener('submit', async function (event) {
@@ -46,6 +48,10 @@ document
         return;
       }
 
+      console.log(data);
+      if (data.data.user.rol == 'admin') {
+        localStorage.setItem('device_id_' + data.data.user.id, data.data.session.device_id);
+      }
       window.location.href = '/';
 
     } catch (error) {
@@ -55,18 +61,6 @@ document
       document.getElementById('error-message').style.display = 'block';
     }
   });
-
-// Función para obtener la IP del cliente usando un servicio de API externo
-async function getIp() {
-  try {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip;
-  } catch (error) {
-    console.error('Error al obtener IP:', error);
-    return '';
-  }
-}
 
 // Función para obtener el id del email que se está logeando
 function getUserIdByEmail(emailToCheck) {

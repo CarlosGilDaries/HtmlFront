@@ -65,10 +65,12 @@ video {
 
 .scroll-left {
     left: 0px;
+    z-index: 1000;
 }
 
 .scroll-right {
     right: 0px;
+    z-index: 1000;
 }
 
 .scroll-left:hover, .scroll-right:hover {
@@ -80,11 +82,10 @@ video {
 }
 
 .content {
-    min-width: 235px;
-    max-width: 235px;
+    min-width: 450px;
+    max-width: 450px;
     height: auto;
     transition: 0.3s;
-    position: relative;
     z-index: 1;
 }
 

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        const user = data.user;
+        const user = data.data.user;
 
         if (user.rol == 'admin') {
           button.innerHTML = 'Panel de Admin';
@@ -36,11 +36,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
           // Definir los campos que quieres mostrar
           const fieldsToDisplay = {
-            id: 'ID',
             name: 'Nombre',
-            email: 'Correo electrónico',
-            plan: 'Plan',
-            rol: 'Rol',
+            surnames: 'Apellidos',
+            email: 'Email',
+            address: 'Dirección',
+            city: 'Ciudad',
+            country: 'País',
+            dni: 'DNI/NIF',
+            gender: 'Sexo',
           };
 
           // Filtrar los datos para que solo se muestren los campos relevantes
@@ -61,21 +64,29 @@ document.addEventListener('DOMContentLoaded', function () {
               }
             }
           }
+
+          const plan = data.data.plan;
+          const planRow = document.createElement('tr');
+          const planKey = document.createElement('td');
+          planKey.innerHTML = 'Plan';
+          const planValue = document.createElement('td');
+          planValue.innerHTML = plan.name;
+          tableBody.appendChild(planRow);
+          planRow.appendChild(planKey);
+          planRow.appendChild(planValue);
         }
 
         button.addEventListener('click', function () {
           if (user.rol == 'admin') {
             window.location.href = '/admin/admin-panel.html';
           } else {
-            window.location.href = '/change-plan.html';
+            window.location.href = '/plans.html';
           } 
         });
       }
     })
   .catch((error) => {
-    alert('Error en la solicitud: ', error);
-    localStorage.removeItem('auth_token');
-    window.location.href = '/login';
+    console.log(error);
   });
 });
 

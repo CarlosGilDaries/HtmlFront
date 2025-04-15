@@ -1,5 +1,29 @@
 @import '/css/commons.css';
+@import '/css/nav.css';
 @import '/css/footer.css';
+
+/* Para Chrome, Safari, Edge */
+.input-box input:-webkit-autofill,
+.input-box input:-webkit-autofill:hover, 
+.input-box input:-webkit-autofill:focus, 
+.input-box input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.1) inset !important;
+    -webkit-text-fill-color: #fff !important;
+    caret-color: #fff !important;
+    border-bottom: 2px solid #fff !important;
+    transition: all 5000s ease-in-out 0s;
+}
+
+/* Para Firefox */
+@-moz-document url-prefix() {
+    .input-box input:-moz-autofill,
+    .input-box input:-moz-autofill:hover,
+    .input-box input:-moz-autofill:focus {
+        filter: none; /* Elimina el fondo amarillo */
+        color: #fff !important;
+        background-color: transparent !important;
+    }
+}
 
 .menu {
     background-color: #000;
@@ -110,6 +134,11 @@ button {
     font-size: 1em;
     color: #000;
     font-weight: 500;
+    transition: 0.3s;
+}
+
+button:hover {
+    filter: brightness(0.8);
 }
 
 .register-link {
