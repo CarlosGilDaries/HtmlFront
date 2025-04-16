@@ -39,6 +39,7 @@ async function fetchMovieData() {
     const data = await response.json();
 
     if (data.success) {
+      console.log(data);
       const image = document.getElementById('content-image');
       const title = document.getElementById('content-title');
       const trailer = document.getElementById('trailer');

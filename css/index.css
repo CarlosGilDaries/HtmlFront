@@ -82,8 +82,8 @@ video {
 }
 
 .content {
-    min-width: 450px;
-    max-width: 450px;
+    max-width: 285px;
+    min-width: 285px;
     height: auto;
     transition: 0.3s;
     z-index: 1;
@@ -96,6 +96,5 @@ video {
 
 .content img {
     border-radius: 10px;
-    max-width: 450px;
     height: auto;
 }

@@ -148,6 +148,18 @@ textarea {
     display: none;
 }
 
+#plans-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.checkbox-container p {
+    position: relative;
+    top: 4px;
+}
+
 .checkbox-container {
     display: flex;
     align-items: center;

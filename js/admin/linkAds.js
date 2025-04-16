@@ -1,3 +1,5 @@
+const backendAPI = 'https://streaming.test/api/';
+
 document.addEventListener('DOMContentLoaded', async function () {
   // Obtener token de autenticación
   const authToken = localStorage.getItem('auth_token');
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       });
 
       try {
-        const response = await fetch('https://streaming.test/api/link-ads', {
+        const response = await fetch(backendAPI + 'link-ads', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -119,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 async function loadInitialData(authToken) {
   try {
     // Cargar contenidos
-    const moviesResponse = await fetch('https://streaming.test/api/content', {
+    const moviesResponse = await fetch(backendAPI + 'content', {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -137,7 +139,7 @@ async function loadInitialData(authToken) {
     }
 
     // Cargar anuncios
-    const adsResponse = await fetch('https://streaming.test/api/ads', {
+    const adsResponse = await fetch(backendAPI + 'ads', {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -203,7 +205,7 @@ async function loadInitialData(authToken) {
           .addEventListener('change', function () {
             const skipTime =
               this.closest('.ad-group').querySelector('.skip-time');
-            skipTime.style.display = this.value === "1" ? 'block' : 'none';
+            skipTime.style.display = this.value === '1' ? 'block' : 'none';
           });
       });
     }

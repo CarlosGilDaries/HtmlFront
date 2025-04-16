@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const backendAPI = 'https://streaming.test/api/';
+  
   // Mostrar nombre de archivos seleccionados
   if (document.getElementById('cover')) {
     document.getElementById('cover').addEventListener('change', function (e) {
@@ -99,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       try {
-        const response = await fetch('https://streaming.test/api/add-ad', {
+        const response = await fetch(backendAPI + '/add-ad', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${authToken}`,

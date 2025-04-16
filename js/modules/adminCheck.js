@@ -1,5 +1,7 @@
 export function adminCheck(token) {
-    fetch('https://streaming.test/api/user', {
+    const backendAPI = 'https://streaming.test/api/';
+    
+    fetch(backendAPI + 'user', {
         headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

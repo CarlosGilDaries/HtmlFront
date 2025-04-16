@@ -1,4 +1,26 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+  const backendAPI = 'https://streaming.test/api/';
+
+  try {
+    const plansContainer = document.getElementById('plans-container');
+    let plansContainerTextContent = '';
+    const response = await fetch(backendAPI + 'plans');
+    const data = await response.json();
+    const plans = data.plans;
+
+    plans.forEach((plan) => {
+      plansContainerTextContent += `
+                                    <label class="checkbox-container">
+                                      <input type="checkbox" name="plans[${plan.id}][id]" value="${plan.id}" id="plan-${plan.id}" class="plan-checkbox">
+                                      <span class="checkmark"></span>
+                                        <p>${plan.name}</p>
+                                    </label>
+                                    `;
+    });
+    plansContainer.innerHTML = plansContainerTextContent;
+  } catch (error) {
+    console.log(error);
+  }
 
   // Mostrar nombre de archivos seleccionados
   const setupFileInput = (inputId, nameId, labelId) => {
@@ -83,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Crear FormData
       const formData = new FormData();
       formData.append('title', document.getElementById('title').value);
       formData.append('type', document.getElementById('type').value);
@@ -143,8 +164,24 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('content', document.getElementById('content').files[0]);
       }
 
+      const checkboxes = document.querySelectorAll('.plan-checkbox');
+      let atLeastOneChecked = false;
+
+      checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          formData.append('plans[]', checkbox.value);
+          atLeastOneChecked = true;
+        }
+      });
+
+      if (!atLeastOneChecked) {
+        document.getElementById('loading').style.display = 'none';
+        alert('Selecciona al menos un plan');
+        return;
+      }
+
       try {
-        const response = await fetch('https://streaming.test/api/add-content', {
+        const response = await fetch(backendAPI + 'add-content', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -191,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Error al subir el contenido: ' + error.message);
       } finally {
         document.getElementById('loading').style.display = 'none';
+        console.log(formData);
       }
     });
 });

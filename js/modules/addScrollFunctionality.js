@@ -1,5 +1,5 @@
 // Función para agregar funcionalidad de desplazamiento con flechas
-export function addScrollFunctionality(container) {
+export function addScrollFunctionality(container, px) {
   const wrapper = container.parentElement;
   const leftArrow = wrapper.querySelector('.scroll-left');
   const rightArrow = wrapper.querySelector('.scroll-right');
@@ -13,11 +13,11 @@ export function addScrollFunctionality(container) {
   }
 
   leftArrow.addEventListener('click', () => {
-    container.scrollBy({ left: -450, behavior: 'smooth' });
+    container.scrollBy({ left: -px, behavior: 'smooth' });
   });
 
   rightArrow.addEventListener('click', () => {
-    container.scrollBy({ left: 450, behavior: 'smooth' });
+    container.scrollBy({ left: px, behavior: 'smooth' });
   });
 
   container.addEventListener('scroll', updateArrows);

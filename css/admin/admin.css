@@ -7,14 +7,15 @@
   width: 100%;
   padding-inline: 60px;
   background-color: black;
+  margin-bottom: 30px;
 }
 
 main {
     margin-bottom: 20px;
-    height: 75vh;
+    min-height: 75vh;
 }
         
-.admin-panel {
+#admin-panel {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
@@ -31,7 +32,8 @@ main {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     border: 1px solid #e1e1e1;
-    width: calc(50% - 30px);
+    width: calc(25% - 30px);
+    height: 170px;
 }
 
 .admin-card:hover {
@@ -49,4 +51,42 @@ main {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     color: #e94560;
+}
+
+@media (max-width: 1450px) {
+    .admin-panel {
+        width: 80%;
+    }
+}
+
+@media (max-width: 1100px) {
+    .admin-card {
+        width: calc(33% - 30px);
+    }
+}
+
+@media (max-width: 840px) {
+    .admin-card {
+        width: calc(50% - 30px);
+    }
+}
+
+@media (max-width: 560px) {
+    .admin-card {
+        width: 100%;
+    }
+    .menu {
+        padding-inline: 5px;
+    }
+
+    .logo {
+        height: 40px;
+        width: auto;
+    }
+
+    .login-btn {
+        height: 30px;
+        width: auto;
+        font-size: 15px;
+    }
 }

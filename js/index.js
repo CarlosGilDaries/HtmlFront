@@ -69,8 +69,8 @@ fetch(api)
       getAudioContent(data, audio, backendURL);
       getVideoContent(data, video, backendURL);
 
-      addScrollFunctionality(audio);
-      addScrollFunctionality(video);
+      addScrollFunctionality(audio, 293);
+      addScrollFunctionality(video, 293);
     } else {
       console.error('Error al consultar la API: ', data.message);
     }
