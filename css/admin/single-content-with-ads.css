@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+@import '/css/commons.css';
+@import '/css/nav.css';
+@import '/css/footer.css';
+@import '/css/admin/admin.css';
+
+.ads-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    width: 90%;
+    margin: auto;
+}
+
+.ads-table th, .ads-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.ads-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.unlink-btn {
+    padding: 6px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.unlink-btn:hover {
+    background-color: #c82333;
+}

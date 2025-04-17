@@ -14,9 +14,10 @@
 
 .admin-card {
     cursor: auto;
+    padding: 9px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     width: calc(20% - 30px);
     height: 190px;
     gap: 5px;
@@ -39,6 +40,17 @@ i {
 
 i:hover {
     transform: translateY(-5px);
+}
+
+.success-message {
+    color: #4caf50;
+    font-size: 1rem;
+    margin-block: 1rem;
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(76, 175, 80, 0.1);
+    border-radius: 4px;
+    display: none;
 }
 
 @media (max-width: 1210px) {

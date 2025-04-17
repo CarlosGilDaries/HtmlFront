@@ -55,7 +55,11 @@ main {
 
 @media (max-width: 1450px) {
     .admin-panel {
-        width: 80%;
+        width: 90%;
+    }
+
+    .admin-card {
+        height: 190px;
     }
 }
 

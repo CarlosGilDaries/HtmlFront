@@ -210,7 +210,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('success-message').style.display = 'block';
         document.getElementById('success-message').textContent = `${
           data.message
-        } - ${data.movie?.title || 'Contenido subido'}`;
+          } - ${data.movie?.title || 'Contenido subido'}`;
+        
+        setTimeout(() => {
+          document.getElementById('success-message').style.display = 'none';
+        }, 5000);
 
         // Resetear formulario
         document.getElementById('content-form').reset();
@@ -228,7 +232,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert('Error al subir el contenido: ' + error.message);
       } finally {
         document.getElementById('loading').style.display = 'none';
-        console.log(formData);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
 });

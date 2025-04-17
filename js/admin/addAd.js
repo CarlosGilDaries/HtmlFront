@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       try {
-        const response = await fetch(backendAPI + '/add-ad', {
+        const response = await fetch(backendAPI + 'add-ad', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -117,9 +117,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Mostrar mensaje de éxito
         document.getElementById('success-message').style.display = 'block';
-        document.getElementById(
-          'success-message'
-        ).textContent = `${data.message} - ${data.data.ad.title}`;
 
         // Resetear formulario
         document.getElementById('content-form').reset();
