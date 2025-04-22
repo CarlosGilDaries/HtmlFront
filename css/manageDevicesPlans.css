@@ -1,4 +1,5 @@
 @import '/css/commons.css';
+@import '/css/nav.css';
 @import '/css/footer.css';
 
 .menu {
@@ -69,6 +70,10 @@ section {
     color: #fff;
     margin: 0;
     flex-grow: 1;
+}
+
+.plan-name {
+    text-align: center;
 }
 
 .delete-device {

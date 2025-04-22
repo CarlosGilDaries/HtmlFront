@@ -3,7 +3,7 @@ import { logOut } from './modules/logOut.js';
 
 const pathParts = window.location.pathname.split('/');
 const movieSlug = pathParts[pathParts.length - 1]; // Extraer el último segmento de la URL
-const api = 'https://streaming.test/api/content/' + movieSlug;
+const api = 'https://streaming.test/api/';
 const backendURL = 'https://streaming.test';
 const play = document.getElementById('play-button');
 const token = localStorage.getItem('auth_token');
@@ -21,10 +21,9 @@ if (device_id == null) {
   logOut(token);
 }
 
-// Función asincrónica que maneja la solicitud
 async function fetchMovieData() {
   try {
-    const response = await fetch(api, {
+    const response = await fetch(api + 'content/' + movieSlug, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -36,14 +35,40 @@ async function fetchMovieData() {
       },
     });
 
-    const data = await response.json();
+    const userResponse = await fetch(api + 'user', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    if (data.success) {
-      console.log(data);
+    const data = await response.json();
+    const userData = await userResponse.json();
+
+    if (userData.success && data.success) {
+      let neededPlans = [];
+      const actualPlan = userData.data.plan.name;
+      data.data.plans.forEach(plan => {
+        if (plan.name != 'Admin') {
+          neededPlans.push(plan.name);
+        }
+      });
+
+      if (!neededPlans.includes(actualPlan) && actualPlan != 'Admin') {
+        localStorage.setItem('actual_plan', actualPlan);
+        localStorage.setItem('needed_plans', neededPlans);
+        window.location.href = '/manage-plans.html';
+      }
+
       const image = document.getElementById('content-image');
       const title = document.getElementById('content-title');
       const trailer = document.getElementById('trailer');
-      trailer.src = backendURL + data.data.movie.trailer;
+      if (data.data.movie.trailer != null) {
+        trailer.src = backendURL + data.data.movie.trailer;
+      } else {
+        trailer.src = '/video/background-loop.mp4';
+      }
       image.src = backendURL + data.data.movie.cover;
       title.innerHTML = data.data.movie.title;
       document.title = data.data.movie.title + ' - Streaming';
