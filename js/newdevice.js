@@ -12,7 +12,7 @@ document
     const user_id = localStorage.getItem('current_user_id');
     const user = localStorage.getItem('user_' + user_id);
     const userObject = JSON.parse(user);
-    const deviceKey = `device_id_${userObject.id}`;
+    const deviceKey = `device_id_${userObject.email}`;
     const deviceId = localStorage.getItem(deviceKey) || generateUUID();
     localStorage.setItem(deviceKey, deviceId);
 
@@ -32,15 +32,24 @@ document
         }),
       });
 
+      const userResponse = await fetch('https://streaming.test/api/user', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+        },
+      });
+
       const data = await response.json();
+      const userData = await userResponse.json();
 
       if (data.success) {
-        window.location.href = 'https://frontend.test';
-      } else {
-        alert('Error al registrar dispositivo: ' + data.message);
-      }
+        if (userData.data.plan == null) {
+          window.location.href = '/plans.html';
+        } else {
+          window.location.href = 'https://frontend.test';
+        }
+      } 
     } catch (error) {
       console.error('Error en la solicitud:', error);
-      alert('Hubo un error al conectar con el servidor');
     }
   });

@@ -2,6 +2,13 @@ import { renderContents } from '../modules/renderContents.js';
 import { setupDeleteButtons } from '../modules/deleteButtons.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
+  const url = window.location.pathname;
+  let model;
+  if (url.includes('ads')) {
+    model = 'ads';
+  } else {
+    model = 'content';
+  }
   const token = localStorage.getItem('auth_token');
   const backendAPI = 'https://streaming.test/api/';
   const success = document.getElementById('success-message');
@@ -10,7 +17,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   let currentSearchTerm = ''; // Término de búsqueda actual
 
   try {
-    const response = await fetch(backendAPI + 'content');
+    const response = await fetch(backendAPI + model, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
     const data = await response.json();
     allContents = data.data;
     currentContents = [...allContents];
@@ -26,17 +38,19 @@ document.addEventListener('DOMContentLoaded', async function () {
       renderContents(currentContents, 'admin-panel', 'fas fa-trash');
       setupDeleteButtons(
         '.admin-form',
-        backendAPI + 'delete-content',
+        backendAPI + `delete/${model}`,
         token,
-        success
+        success,
+        model
       );
     });
 
     setupDeleteButtons(
       '.admin-form',
-      backendAPI + 'delete-content',
+      backendAPI + `delete-${model}`,
       token,
-      success
+      success,
+      model
     );
     
     window.scrollTo({ top: 0, behavior: 'smooth' });

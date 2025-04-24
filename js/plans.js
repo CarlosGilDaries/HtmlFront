@@ -10,7 +10,7 @@ try {
   });
   const data = await response.json();
   const userData = await userResponse.json();
-  if (userData.success && data.success) {
+  if (userData.success && data.success && userData.data.plan != null) {
     const plans = data.plans;
     const actualPlan = userData.data.plan.name;
     displayPlans(plans, actualPlan);
@@ -122,18 +122,46 @@ async function selectPlan(planId) {
 
     const data = await response.json();
 
-    if (data.success) {
-      alert('Plan registrado con éxito.');
-      if (data.require_device_registration) {
-        window.location.href = '/new-device.html';
-      } else {
-        window.location.href = '/';
-      }
+    if (data.success && data.payment_required) {
+      await processRedsysPayment(data);
+      return;
+      console.log(data);
+    } else if (data.success && !data.payment_required) {
+      window.location.href = '/';
     } else {
-      alert('Hubo algún problema al registrar el plan.');
+      console.log('Else');
     }
   } catch (error) {
     console.log(error);
     alert(error);
+  }
+}
+
+async function processRedsysPayment(redsysData) {
+  try {
+    // Crear formulario oculto
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://sis-t.redsys.es:25443/sis/realizarPago'; // URL de prueba
+
+    // Agregar campos requeridos
+    const addHiddenField = (name, value) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    };
+
+    // Campos básicos de Redsys
+    addHiddenField('Ds_SignatureVersion', 'HMAC_SHA256_V1');
+    addHiddenField('Ds_MerchantParameters', redsysData.Ds_MerchantParameters);
+    addHiddenField('Ds_Signature', redsysData.Ds_Signature);
+
+    // Agregar formulario al DOM y enviar
+    document.body.appendChild(form);
+    form.submit();
+  } catch (error) {
+    console.error('Error al procesar pago:', error);
   }
 }

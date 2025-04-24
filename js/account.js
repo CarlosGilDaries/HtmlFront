@@ -1,13 +1,14 @@
 import { logOut } from "./modules/logOut.js";
 
 const token = localStorage.getItem('auth_token');
+if (token == null) {
+  window.location.href = '/login';
+}
 const button = document.querySelector('.select-plan');
 const user_id = localStorage.getItem('current_user_id');
-const device_id = localStorage.getItem('device_id_' + user_id);
-
-if (token == null) {
-    window.location.href = '/login';
-}
+const userLogged = JSON.parse(localStorage.getItem('user_' + user_id));
+const email = userLogged.email;
+const device_id = localStorage.getItem('device_id_' + email);
 
 if (device_id == null) {
   logOut(token);

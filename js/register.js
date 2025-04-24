@@ -55,7 +55,7 @@ document
         JSON.stringify(data.data.user)
       );
         localStorage.setItem('current_user_id', data.data.user.id);
-        localStorage.setItem('device_id_' + data.data.user.id, device_id);
+        localStorage.setItem('device_id_' + data.data.user.email, device_id);
 
       if (data.data.require_device_registration) {
         window.location.href = '/new-device.html';

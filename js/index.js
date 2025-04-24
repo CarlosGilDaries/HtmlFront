@@ -3,11 +3,19 @@ import { getAudioContent } from './modules/getAudioContent.js';
 import { getVideoContent } from './modules/getVideoContent.js';
 import { addScrollFunctionality } from './modules/addScrollFunctionality.js';
 
+const token = localStorage.getItem('auth_token');
 const api = 'https://streaming.test/api/content';
 const backendURL = 'https://streaming.test';
 const user_id = localStorage.getItem('current_user_id');
-const device_id = localStorage.getItem('device_id_' + user_id);
-const token = localStorage.getItem('auth_token');
+if (user_id != null) {
+  const userJson = localStorage.getItem('user_' + user_id);
+  const user = JSON.parse(userJson);
+  const email = user.email;
+  const device_id = localStorage.getItem('device_id_' + email);
+  if (device_id == null && token != null) {
+    logOut(token);
+  }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   const menu = document.querySelector('.menu');
@@ -21,10 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
-
-if (device_id == null && token != null) {
-  logOut(token);
-}
 
  const allKeys = Object.keys(localStorage);
  const deviceIds = allKeys

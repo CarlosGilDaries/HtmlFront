@@ -1,24 +1,26 @@
 import { getIp } from './modules/getIp.js';
 import { logOut } from './modules/logOut.js';
+const token = localStorage.getItem('auth_token');
 
+if (token == null) {
+  window.location.href = '/login';
+
+}
 const pathParts = window.location.pathname.split('/');
 const movieSlug = pathParts[pathParts.length - 1]; // Extraer el último segmento de la URL
 const api = 'https://streaming.test/api/';
 const backendURL = 'https://streaming.test';
 const play = document.getElementById('play-button');
-const token = localStorage.getItem('auth_token');
-
-if (token == null) {
-  window.location.href = '/login';
-}
 const user_id = localStorage.getItem('current_user_id');
-const user = localStorage.getItem('user_' + user_id);
-const device_id = localStorage.getItem('device_id_' + user_id);
+const userJson = localStorage.getItem('user_' + user_id);
+const user = JSON.parse(userJson);
+const email = user.email;
+const device_id = localStorage.getItem('device_id_' + email);
 const ip = await getIp();
 const userAgent = navigator.userAgent;
 
 if (device_id == null) {
-  logOut(token);
+  //logOut(token);
 }
 
 async function fetchMovieData() {
@@ -47,6 +49,10 @@ async function fetchMovieData() {
     const userData = await userResponse.json();
 
     if (userData.success && data.success) {
+      if (userData.data.plan == null) {
+        window.location.href = '/plans.html';
+        return;
+      }
       let neededPlans = [];
       const actualPlan = userData.data.plan.name;
       data.data.plans.forEach(plan => {
@@ -80,7 +86,6 @@ async function fetchMovieData() {
       console.error('Error al consultar la API: ', data.message);
     }
   } catch (error) {
-    alert('Error en la solicitud: ', error);
     console.log(error);
   }
 }

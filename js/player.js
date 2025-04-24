@@ -16,7 +16,10 @@ if (token == null) {
 }
 
 const user_id = localStorage.getItem('current_user_id');
-const device_id = localStorage.getItem('device_id_' + user_id);
+const userJson = localStorage.getItem('user_' + user_id);
+const user = JSON.parse(userJson);
+const email = user.email;
+const device_id = localStorage.getItem('device_id_' + email);
 const ip = await getIp();
 const userAgent = navigator.userAgent;
 

@@ -1,6 +1,6 @@
 import { renderContents } from './renderContents.js';
 
-export function setupDeleteButtons(formClass, endpoint, token, messageElement) {
+export function setupDeleteButtons(formClass, endpoint, token, messageElement, model) {
   document.querySelectorAll(formClass).forEach((form) => {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -32,12 +32,16 @@ export function setupDeleteButtons(formClass, endpoint, token, messageElement) {
             }, 5000);
 
             const backendAPI = 'https://streaming.test/api/';
-            const response = await fetch(backendAPI + 'content');
+            const response = await fetch(backendAPI + model, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
             const data = await response.json();
             let allContents = data.data;
             renderContents(allContents, 'admin-panel', 'fas fa-trash');
             messageElement.style.display = 'block';
-            setupDeleteButtons(formClass, endpoint, token, messageElement);
+            setupDeleteButtons(formClass, endpoint, token, messageElement, model);
           }
         } catch (error) {
           console.error('Error:', error);

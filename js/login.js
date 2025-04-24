@@ -9,8 +9,7 @@ document
     const password = document.getElementById('password').value;
     const ip = await getIp();
     const userAgent = navigator.userAgent;
-    const user_id = getUserIdByEmail(email);
-    const device_id = localStorage.getItem('device_id_' + user_id);
+    const device_id = localStorage.getItem('device_id_' + email);
 
     try {
       const response = await fetch('https://streaming.test/api/login', {
@@ -49,6 +48,8 @@ document
       }
 
       console.log(data);
+      console.log(email);
+      console.log(device_id);
       if (data.data.user.rol == 'admin') {
         localStorage.setItem('device_id_' + data.data.user.id, data.data.session.device_id);
       }
@@ -63,22 +64,12 @@ document
   });
 
 // Función para obtener el id del email que se está logeando
-function getUserIdByEmail(emailToCheck) {
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
+function getDeviceIdByEmail(emailToCheck) {
 
-    if (key.startsWith('user_')) {
-      try {
-        const user = JSON.parse(localStorage.getItem(key));
-
-        if (user.email === emailToCheck) {
-          return user.id;
-        }
-      } catch (error) {
-        console.error(`Error leyendo el valor de ${key}:`, error);
-      }
-    }
+  try {
+    $device_id = localStorage.getItem('');
+  } catch (error) {
+    console.error(`Error leyendo el valor de ${key}:`, error);
   }
-
   return null; 
 }

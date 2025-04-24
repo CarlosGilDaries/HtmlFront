@@ -1,0 +1,74 @@
+const urlParams = new URLSearchParams(window.location.search);
+let slug = urlParams.get('slug');
+const token = localStorage.getItem('auth_token');
+const backendAPI = 'https://streaming.test/api/';
+
+async function loadContentData(slug) {
+  try {
+    const response = await fetch(backendAPI + `ad/${slug}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+      const ad = data.data;
+      console.log(ad);
+    
+      document.getElementById('title').value = ad.title;
+      document.getElementById('brand').value = ad.brand;
+      
+  } catch (error) {
+    console.error('Error cargando anuncio:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    loadContentData(slug);
+    
+  document
+    .getElementById('ad-form')
+    .addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      document.getElementById('loading').style.display = 'block';
+
+      const formData = new FormData();
+      formData.append('title', document.getElementById('title').value);
+      formData.append('brand', document.getElementById('brand').value);
+
+      try {
+        const editResponse = await fetch(backendAPI + `update-ad/${slug}`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+        const data = await editResponse.json();
+
+        if (data.success) {
+          // Mostrar mensaje de éxito
+          document.getElementById('success-message').style.display = 'block';
+
+          setTimeout(() => {
+            document.getElementById('success-message').style.display = 'none';
+          }, 5000);
+
+          if (data.new_slug && data.new_slug !== slug) {
+            const newUrl = window.location.pathname + '?slug=' + data.new_slug;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+            slug = data.new_slug;
+          }
+          console.log('Archivo editado.');
+          loadContentData(slug);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          console.log('Error al editar:', data.message);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        document.getElementById('loading').style.display = 'none';
+      }
+    });
+});
