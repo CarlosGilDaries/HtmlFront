@@ -31,7 +31,6 @@ async function initStream() {
     } catch (error) {
         console.error('Error:', error);
         alert('Error al comprobar streams: ' + error.message);
-        window.location.href = '/index.html';
     }
 }
 

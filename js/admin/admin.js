@@ -19,3 +19,39 @@ document.addEventListener('DOMContentLoaded', adminCheck(token));
 logOutButton.addEventListener('click', function () {
     logOut(token);
 })
+
+document.addEventListener('DOMContentLoaded', function () {
+  const menuItems = document.querySelectorAll('.admin-menu li');
+  const contentContainers = document.querySelectorAll('.container');
+
+  // Variable para mantener referencia al script cargado actualmente
+  let currentScript = null;
+
+  function activeItems(e) {
+    menuItems.forEach((item) => item.classList.remove('active'));
+    this.classList.add('active');
+    contentContainers.forEach((container) => container.classList.add('hidden'));
+    const contentId = this.getAttribute('data-content');
+    document.getElementById(contentId).classList.remove('hidden');
+
+    const scriptUrl = this.getAttribute('data-script');
+    // Limpiar el script anterior si existe
+    if (currentScript) {
+      currentScript.remove();
+      currentScript = null;
+    }
+    // Cargar el nuevo script si está especificado
+    if (scriptUrl) {
+      currentScript = document.createElement('script');
+      currentScript.src = scriptUrl;
+      document.body.appendChild(currentScript);
+    }
+  }
+
+  menuItems.forEach((item) => {
+    item.addEventListener('click', activeItems);
+  });
+
+  // Activar el primer item del menú por defecto
+  document.querySelector('.admin-menu li[data-content="add-content"]').click();
+})

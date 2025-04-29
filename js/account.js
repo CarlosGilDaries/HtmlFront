@@ -10,9 +10,9 @@ const userLogged = JSON.parse(localStorage.getItem('user_' + user_id));
 const email = userLogged.email;
 const device_id = localStorage.getItem('device_id_' + email);
 
-if (device_id == null) {
+/*if (device_id == null) {
   logOut(token);
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', function () {
   fetch('https://streaming.test/api/user', {

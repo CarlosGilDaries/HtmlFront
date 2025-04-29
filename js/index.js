@@ -6,7 +6,7 @@ import { addScrollFunctionality } from './modules/addScrollFunctionality.js';
 const token = localStorage.getItem('auth_token');
 const api = 'https://streaming.test/api/content';
 const backendURL = 'https://streaming.test';
-const user_id = localStorage.getItem('current_user_id');
+/*const user_id = localStorage.getItem('current_user_id');
 if (user_id != null) {
   const userJson = localStorage.getItem('user_' + user_id);
   const user = JSON.parse(userJson);
@@ -15,7 +15,7 @@ if (user_id != null) {
   if (device_id == null && token != null) {
     logOut(token);
   }
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', function () {
   const menu = document.querySelector('.menu');

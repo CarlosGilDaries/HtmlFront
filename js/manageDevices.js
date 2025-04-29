@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const token = localStorage.getItem('auth_token');
 
   if (!token) {
-    window.location.href = '/login.html';
+    window.location.href = '/login';
     return;
   }
 

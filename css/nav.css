@@ -1,11 +1,13 @@
 .menu {
-    width: 95%;
+    width: 100%;
     margin-inline: auto;
+    padding-inline: 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 5px;
     font-size: 15px;
+    transition: background-color 0.5s ease-out;
 }
 
 .scrolled { /*Clase a la que cambia el menu al scrollear*/
@@ -13,7 +15,6 @@
     top: 0;
     left: 50%; /* Mueve el menú al centro */
     transform: translateX(-50%); /* Lo ajusta para que se mantenga centrado */
-    width: 95%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,6 +22,7 @@
     font-size: 15px;
     background-color: black;
     z-index: 1000;
+    transition: background-color 0.5s ease-in;
 }
 
 .nav {
@@ -33,13 +35,13 @@
 /*LEFT MENU*/
 .left-nav {
     display: flex;
-    font-size: 18px;
+    font-size: 16px;
     gap: 40px;
 }
 
 .logo {
-    width: 110px;
-    height: 60px;
+    width: 65px;
+    height: 40px;
 }
 
 .left-nav li:nth-child(2),
@@ -73,12 +75,12 @@
 }
 
 .right-nav li:nth-child(1) {
-    width: 35px;  
+    width: 25px;  
 }
 
 .user {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     border-radius: 10px;
     overflow: hidden;
     background-color: white;
@@ -92,7 +94,7 @@
 
 .login-btn {
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     padding: 5px;
     cursor: pointer;

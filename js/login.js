@@ -49,7 +49,7 @@ document
 
       console.log(data);
       console.log(email);
-      console.log(device_id);
+      console.log(data.data.session.device_id);
       if (data.data.user.rol == 'admin') {
         localStorage.setItem('device_id_' + data.data.user.id, data.data.session.device_id);
       }

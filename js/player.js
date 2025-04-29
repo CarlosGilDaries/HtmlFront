@@ -23,9 +23,9 @@ const device_id = localStorage.getItem('device_id_' + email);
 const ip = await getIp();
 const userAgent = navigator.userAgent;
 
-if (device_id == null) {
+/*if (device_id == null) {
   logOut(token);
-}
+}*/
 
 fetch(apiShow, {
   method: 'GET',
