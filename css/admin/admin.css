@@ -4,6 +4,7 @@
 @import '/css/footer.css';
 @import '/css/admin/addForm.css';
 @import '/css/admin/list-content.css';
+@import '/css/admin/linkAds.css';
 
 .menu {
   width: 100%;
@@ -14,6 +15,7 @@
 
 .admin-container {
     display: flex;
+    min-height: 82vh;
 }
 
 .admin-sidebar {

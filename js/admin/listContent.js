@@ -1,9 +1,11 @@
-import { formatDuration } from "../modules/formatDuration.js";
+import { formatDuration } from '../modules/formatDuration.js';
+import { deleteForm } from '../modules/deleteForm.js';
 
 (function () {
   async function listContent() {
     const listContent = document.getElementById('list-content');
     const backendAPI = 'https://streaming.test/api/content-list';
+    const backendDeleteApi = 'https://streaming.test/api/delete-content';
     const backendURL = 'https://streaming.test';
     const authToken = localStorage.getItem('auth_token');
 
@@ -48,8 +50,17 @@ import { formatDuration } from "../modules/formatDuration.js";
       document.getElementById(contentId).classList.remove('hidden');
 
       const slug = element.getAttribute('data-slug');
+      const title = element.getAttribute('data-title');
+      const movieId = element.getAttribute('data-id');
       if (slug) {
         localStorage.setItem('slug', slug);
+      }
+      if (title) {
+        localStorage.setItem('title', title);
+        console.log(title);
+      }
+      if (movieId) {
+        localStorage.setItem('content_id', movieId);
       }
 
       const scriptUrl = element.getAttribute('data-script');
@@ -91,7 +102,10 @@ import { formatDuration } from "../modules/formatDuration.js";
 
         // Generar HTML de la tabla
         let tableHTML = `
-                    <h1><i class="fas fa-eye"></i> Lista de Contenido</h1>    
+                    <h1><i class="fas fa-eye"></i> Lista de Contenido</h1>
+                    <div id="delete-content-success-message" class="success-message" style="margin-bottom: 20px;">
+                      ¡Contenido eliminado con éxito!
+                  </div>    
                     <div class="table-responsive">
                         <table class="content-table">
                             <thead>
@@ -137,12 +151,22 @@ import { formatDuration } from "../modules/formatDuration.js";
                                         <a href="/${
                                           movie.slug
                                         }" class="">Ver</a>
-                                        <a href="#" class="action-item content-action edit-button" data-content="edit-content" data-slug="${
+                                        <button class="action-item content-action edit-button" data-content="edit-content" data-slug="${
                                           movie.slug
-                                        }" data-script="/js/admin/editContentForm.js">Editar</a>
-                                        <a href="#" class="action-item content-action" data-movie-id="${
+                                        }" data-script="/js/admin/editContentForm.js">Editar</button>
+                                        <button class="action-item content-action link-button" data-content="link-content-with-ads" data-id="${
                                           movie.id
-                                        }">Eliminar</a>
+                                        }" data-title="${movie.title}" data-script="/js/admin/linkAds.js">Anuncios</button>
+                                        <form class="content-delete-form" data-id="${
+                                          movie.id
+                                        }">
+                                        <input type="hidden" name="content_id" value="${
+                                          movie.id
+                                        }">
+                                        <button class="action-item content-action delete-btn" data-movie-id="${
+                                          movie.id
+                                        }" type="submit">Eliminar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>
@@ -163,18 +187,22 @@ import { formatDuration } from "../modules/formatDuration.js";
         setupActionMenus();
 
         // Añadir event listeners para los botones de acción
-        document
-          .querySelectorAll('.content-action')
-          .forEach((btn) => {
-            btn.addEventListener('click', function (e) {
-              e.preventDefault();
-              if (btn.innerHTML == 'Editar') {
-                activeItemsEdit(btn);
-              }
-              // Aquí puedes añadir lógica para editar/eliminar
-            });
+        document.querySelectorAll('.edit-button').forEach((btn) => {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+              activeItemsEdit(btn);
           });
-        
+        });
+
+        document.querySelectorAll('.link-button').forEach((btn) => {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            activeItemsEdit(btn);
+          });
+        });
+
+        const message = document.getElementById('delete-content-success-message');
+        deleteForm(authToken, '.content-delete-form', backendDeleteApi, message);
       } catch (error) {
         console.error('Error al cargar la lista de contenido:', error);
         listContent.innerHTML = `

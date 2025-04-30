@@ -38,15 +38,15 @@
                 </li>
                 <li data-content="list-content" data-script="/js/admin/listContent.js">
                     <i class="fas fa-eye"></i>
-                    <span>Listar contenido</span>
+                    <span>Contenido</span>
                 </li>
                 <li data-content="list-ads" data-script="/js/admin/listAds.js">
                     <i class="fas fa-eye"></i>
-                    <span>Listar anuncios</span>
+                    <span>Anuncios</span>
                 </li>
-                <li data-content="link-content-ads">
-                    <i class="fas fa-link"></i>
-                    <span>Vincular anuncios</span>
+                <li data-content="content-with-ads">
+                    <i class="fas fa-eye"></i>
+                    <span>Contenido con anuncios</span>
                 </li>
                 <li data-content="plans">
                     <i class="fa-solid fa-euro-sign"></i>
@@ -421,7 +421,7 @@
                     <!-- Listar Anuncios -->
                 </div>
 
-                <div id="edit-content" class="container hidden list">
+                <div id="edit-content" class="container hidden">
                     <!-- Editar Contenido -->
                     <h1><i class="fas fa-pen"></i> Editar Contenido</h1>
                     <div id="edit-content-success-message" class="success-message">
@@ -566,7 +566,7 @@
                     </form>
                 </div>
 
-                <div class="container" id="edit-ad">
+                <div class="container hidden" id="edit-ad">
                     <!-- Editar Anuncio -->
                     <h1><i class="fas fa-pen"></i> Editar Anuncio</h1>
                     <div id="edit-ad-success-message" class="success-message">
@@ -594,6 +594,36 @@
                         <i class="fas fa-upload"></i> Editar anuncio
                     </button>
                 </form>
+                </div>
+
+                <!-- Vincular anuncios -->
+                <div class="container hidden" id="link-content-with-ads">
+
+                    <h1><i class="fas fa-link"></i> Vincular Anuncios a Contenido</h1>
+                    <div id="link-success-message" class="success-message">
+                        Anuncios vinculados correctamente!
+                    </div>
+                    
+                        <form id="link-form">
+                            <div class="form-group">
+                                <h2 id="link-movie-title" style="text-align: center;"></h2>
+                                <div id="link-content_id-error" class="error-message"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Seleccionar anuncios:</label>
+                                <div id="link-ads-container"></div>
+                            </div>
+                            
+                            <div class="loading" id="link-loading">
+                                <div class="loading-spinner"></div>
+                                <p>Guardando configuración, por favor espere...</p>
+                            </div>
+                            
+                            <button type="submit" class="btn">
+                                <i class="fas fa-save"></i> Guardar Configuración
+                            </button>
+                        </form>
                 </div>
 
             </div>

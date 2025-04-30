@@ -1,6 +1,12 @@
 import { renderContents } from './renderContents.js';
 
-export function setupDeleteButtons(formClass, endpoint, token, messageElement, model) {
+export function setupDeleteButtons(
+  formClass,
+  endpoint,
+  token,
+  messageElement,
+  model
+) {
   document.querySelectorAll(formClass).forEach((form) => {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -41,7 +47,13 @@ export function setupDeleteButtons(formClass, endpoint, token, messageElement, m
             let allContents = data.data;
             renderContents(allContents, 'admin-panel', 'fas fa-trash');
             messageElement.style.display = 'block';
-            setupDeleteButtons(formClass, endpoint, token, messageElement, model);
+            setupDeleteButtons(
+              formClass,
+              endpoint,
+              token,
+              messageElement,
+              model
+            );
           }
         } catch (error) {
           console.error('Error:', error);

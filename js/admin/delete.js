@@ -1,5 +1,5 @@
-import { renderContents } from '../modules/renderContents.js';
-import { setupDeleteButtons } from '../modules/deleteButtons.js';
+import { renderContents } from '../backUpjs/renderContents.js';
+import { setupDeleteButtons } from '../backUpjs/deleteButtons.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   const url = window.location.pathname;
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       success,
       model
     );
-    
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (error) {
     console.log(error);

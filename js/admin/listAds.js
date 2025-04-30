@@ -1,9 +1,11 @@
 import { formatDuration } from '../modules/formatDuration.js';
+import { deleteForm } from '../modules/deleteForm.js';
 
 (function () {
   async function listAds() {
     const listContent = document.getElementById('list-ads');
     const backendAPI = 'https://streaming.test/api/ads-list';
+    const backendDeleteApi = 'https://streaming.test/api/delete-ads';
     const backendURL = 'https://streaming.test';
     const authToken = localStorage.getItem('auth_token');
 
@@ -85,7 +87,10 @@ import { formatDuration } from '../modules/formatDuration.js';
 
         // Generar HTML de la tabla
           let tableHTML = `
-                    <h1><i class="fas fa-eye"></i> Lista de Anuncios</h1>   
+                    <h1><i class="fas fa-eye"></i> Lista de Anuncios</h1>
+                    <div id="delete-ad-success-message" class="success-message" style="margin-bottom: 20px;">
+                      ¡Anuncio eliminado con éxito!
+                    </div>    
                     <div class="table-responsive">
                         <table class="content-table">
                             <thead>
@@ -128,12 +133,17 @@ import { formatDuration } from '../modules/formatDuration.js';
                                         <a href="/player/ad/${
                                           ad.slug
                                         }" class="">Ver</a>
-                                        <a href="#" class="action-item edit-button ad-action" data-content="edit-ad" data-slug="${
+                                        <button class="action-item edit-button ad-action" data-content="edit-ad" data-slug="${
                                           ad.slug
-                                        }" data-script="/js/admin/editAdsForm.js">Editar</a>
-                                        <a href="#" class="action-item" data-movie-id="${
+                                        }" data-script="/js/admin/editAdsForm.js">Editar</button>
+                                        <form class="ads-delete-form" data-id="${
                                           ad.id
-                                        }">Eliminar</a>
+                                        }">
+                                        <input type="hidden" name="content_id" value="${
+                                          ad.id
+                                        }">
+                                        <button class="action-item content-action delete-btn" type="submit">Eliminar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>
@@ -155,12 +165,19 @@ import { formatDuration } from '../modules/formatDuration.js';
                                         <a href="/player/ad/${
                                           ad.slug
                                         }" class="">Ver</a>
-                                        <a href="#" class="action-item edit-button ad-action" data-content="edit-ad" data-slug="${
+                                        <button class="action-item edit-button ad-action" data-content="edit-ad" data-slug="${
                                           ad.slug
-                                        }" data-script="/js/admin/editAdsForm.js">Editar</a>
-                                        <a href="#" class="action-item ad-action" data-movie-id="${
+                                        }" data-script="/js/admin/editAdsForm.js">Editar</button>
+                                        <form class="ads-delete-form" data-id="${
                                           ad.id
-                                        }">Eliminar</a>
+                                        }">
+                                        <input type="hidden" name="content_id" value="${
+                                          ad.id
+                                        }">
+                                        <button class="action-item content-action delete-btn" data-movie-id="${
+                                          ad.id
+                                        }" type="submit">Eliminar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>
@@ -182,15 +199,15 @@ import { formatDuration } from '../modules/formatDuration.js';
         setupActionMenus();
 
         // Añadir event listeners para los botones de acción
-        document.querySelectorAll('.ad-action').forEach((btn) => {
+        document.querySelectorAll('.edit-button').forEach((btn) => {
           btn.addEventListener('click', function (e) {
             e.preventDefault();
-            if (btn.innerHTML == 'Editar') {
               activeItemsEdit(btn);
-            }
-            // Aquí puedes añadir lógica para editar/eliminar
           });
         });
+
+        const message = document.getElementById('delete-ad-success-message');
+        deleteForm(authToken, '.ads-delete-form', backendDeleteApi, message);
       } catch (error) {
         console.error('Error al cargar la lista de contenido:', error);
         listContent.innerHTML = `
