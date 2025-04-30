@@ -1,15 +1,15 @@
-import { formatDuration } from "../modules/formatDuration.js";
+import { formatDuration } from '../modules/formatDuration.js';
 
 (function () {
-  async function listContent() {
-    const listContent = document.getElementById('list-content');
-    const backendAPI = 'https://streaming.test/api/content-list';
+  async function listAds() {
+    const listContent = document.getElementById('list-ads');
+    const backendAPI = 'https://streaming.test/api/ads-list';
     const backendURL = 'https://streaming.test';
     const authToken = localStorage.getItem('auth_token');
 
     // Función para mostrar/ocultar menús de acciones
     function setupActionMenus() {
-      document.querySelectorAll('.content-button').forEach((button) => {
+      document.querySelectorAll('.ads-button').forEach((button) => {
         button.addEventListener('click', function (e) {
           e.stopPropagation();
           const menu = this.nextElementSibling;
@@ -81,73 +81,92 @@ import { formatDuration } from "../modules/formatDuration.js";
           throw new Error(data.message);
         }
 
-        const { movies, genders } = data.data;
-
-        // Crear mapeo de géneros para búsqueda rápida
-        const genderMap = {};
-        genders.forEach((gender) => {
-          genderMap[gender.id] = gender.name;
-        });
+        const ads = data.data;
 
         // Generar HTML de la tabla
-        let tableHTML = `
-                    <h1><i class="fas fa-eye"></i> Lista de Contenido</h1>    
+          let tableHTML = `
+                    <h1><i class="fas fa-eye"></i> Lista de Anuncios</h1>   
                     <div class="table-responsive">
                         <table class="content-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Título</th>
-                                    <th>Portada</th>
-                                    <th>Género</th>
+                                    <th>Marca</th>
                                     <th>Tipo</th>
-                                    <th>PPV</th>
                                     <th>Duración</th>
+                                    <th>Imagen</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                 `;
 
-        movies.forEach((movie) => {
+        ads.forEach((ad) => {
           let type;
-          const cover = backendURL + movie.cover;
-
-          if (movie.type == 'application/vnd.apple.mpegurl') {
+          let cover;
+          if (ad.type == 'application/vnd.apple.mpegurl') {
             type = 'HLS';
           } else {
-            type = movie.type;
+            type = ad.type;
           }
-
-          tableHTML += `
+          if (ad.cover == null) {
+            tableHTML += ` 
                         <tr>
-                            <td>${movie.id}</td>
-                            <td>${movie.title}</td>
-                            <td><img src="${cover}" alt="${
-            movie.title
-          }" class="cover-image"></td>
-                            <td>${genderMap[movie.gender_id] || 'N/A'}</td>
+                            <td>${ad.id}</td>
+                            <td>${ad.title}</td>
+                            <td>${ad.brand}</td>
                             <td>${type}</td>
-                            <td>${movie.pay_per_view ? 'Sí' : 'No'}</td>
-                            <td>${formatDuration(movie.duration)}</td>
+                            <td>${formatDuration(ad.duration)}</td>
+                            <td><img src="${cover}" alt="${
+              ad.title
+            }" class="cover-image"></td>
                             <td>
                                 <div class="actions-container">
-                                    <button class="actions-button content-button">Acciones</button>
+                                    <button class="actions-button ads-button">Acciones</button>
                                     <div class="actions-menu">
-                                        <a href="/${
-                                          movie.slug
+                                        <a href="/player/ad/${
+                                          ad.slug
                                         }" class="">Ver</a>
-                                        <a href="#" class="action-item content-action edit-button" data-content="edit-content" data-slug="${
-                                          movie.slug
-                                        }" data-script="/js/admin/editContentForm.js">Editar</a>
-                                        <a href="#" class="action-item content-action" data-movie-id="${
-                                          movie.id
+                                        <a href="#" class="action-item edit-button ad-action" data-content="edit-ad" data-slug="${
+                                          ad.slug
+                                        }" data-script="/js/admin/editAdsForm.js">Editar</a>
+                                        <a href="#" class="action-item" data-movie-id="${
+                                          ad.id
                                         }">Eliminar</a>
                                     </div>
                                 </div>
                             </td>
                         </tr>
                     `;
+          } else {
+            tableHTML += `
+                        <tr>
+                            <td>${ad.id}</td>
+                            <td>${ad.title}</td>
+                            <td>${ad.brand}</td>
+                            <td>${type}</td>
+                            <td>${formatDuration(ad.duration)}</td>
+                            <td>N/A</td>
+                            <td>
+                                <div class="actions-container">
+                                    <button class="actions-button">Acciones</button>
+                                    <div class="actions-menu">
+                                        <a href="/player/ad/${
+                                          ad.slug
+                                        }" class="">Ver</a>
+                                        <a href="#" class="action-item edit-button ad-action" data-content="edit-ad" data-slug="${
+                                          ad.slug
+                                        }" data-script="/js/admin/editAdsForm.js">Editar</a>
+                                        <a href="#" class="action-item ad-action" data-movie-id="${
+                                          ad.id
+                                        }">Eliminar</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+          }
         });
 
         tableHTML += `
@@ -163,18 +182,15 @@ import { formatDuration } from "../modules/formatDuration.js";
         setupActionMenus();
 
         // Añadir event listeners para los botones de acción
-        document
-          .querySelectorAll('.content-action')
-          .forEach((btn) => {
-            btn.addEventListener('click', function (e) {
-              e.preventDefault();
-              if (btn.innerHTML == 'Editar') {
-                activeItemsEdit(btn);
-              }
-              // Aquí puedes añadir lógica para editar/eliminar
-            });
+        document.querySelectorAll('.ad-action').forEach((btn) => {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (btn.innerHTML == 'Editar') {
+              activeItemsEdit(btn);
+            }
+            // Aquí puedes añadir lógica para editar/eliminar
           });
-        
+        });
       } catch (error) {
         console.error('Error al cargar la lista de contenido:', error);
         listContent.innerHTML = `
@@ -191,8 +207,8 @@ import { formatDuration } from "../modules/formatDuration.js";
 
   // Verificar si el DOM está listo
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', listContent);
+    document.addEventListener('DOMContentLoaded', listAds);
   } else {
-    listContent();
+    listAds();
   }
 })();

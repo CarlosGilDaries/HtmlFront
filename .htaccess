@@ -18,6 +18,9 @@ RewriteRule ^stream-limit$ /stream-limit.html [L,QSA]
 # Redirigir /player/slug a player.html
 RewriteRule ^player/([^/]+)$ /player.html [L,QSA]
 
+# Redirigir /player/ad/slug a admin/ad-player.html
+RewriteRule ^player/ad/([^/]+)$ /admin/ad-player.html [L,QSA]
+
 # Redirigir /account a account.html
 RewriteRule ^account$ /account.html [L,QSA]
 

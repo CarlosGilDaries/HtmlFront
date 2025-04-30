@@ -27,12 +27,17 @@ document.addEventListener('DOMContentLoaded', function () {
   // Variable para mantener referencia al script cargado actualmente
   let currentScript = null;
 
-  function activeItems(e) {
+  function activeItems() {
     menuItems.forEach((item) => item.classList.remove('active'));
     this.classList.add('active');
     contentContainers.forEach((container) => container.classList.add('hidden'));
     const contentId = this.getAttribute('data-content');
     document.getElementById(contentId).classList.remove('hidden');
+
+    const slug = this.getAttribute('data-slug');
+    if (slug) {
+      localStorage.setItem('slug', slug);
+    }
 
     const scriptUrl = this.getAttribute('data-script');
     // Limpiar el script anterior si existe
@@ -44,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (scriptUrl) {
       currentScript = document.createElement('script');
       currentScript.src = scriptUrl;
+      currentScript.type = 'module';
       document.body.appendChild(currentScript);
     }
   }
@@ -51,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
   menuItems.forEach((item) => {
     item.addEventListener('click', activeItems);
   });
+
 
   // Activar el primer item del menú por defecto
   document.querySelector('.admin-menu li[data-content="add-content"]').click();

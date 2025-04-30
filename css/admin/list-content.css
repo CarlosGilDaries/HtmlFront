@@ -1,36 +1,36 @@
-#list-content {
+.list {
     margin-top: 20px;
 }
 
-#list-content table {
+.list table {
     width: 100%;
     margin-bottom: 1rem;
     color: #212529;
 }
 
-#list-content th {
+.list th {
     background-color: #343a40;
     color: white;
     padding: 12px;
     text-align: left;
 }
 
-#list-content td {
+.list td {
     padding: 12px;
     vertical-align: middle;
     border-top: 1px solid #dee2e6;
 }
 
-#list-content img {
+.list img {
     border-radius: 4px;
 }
 
-#list-content .dropdown-menu {
+.list .dropdown-menu {
     min-width: 100px;
 }
 
-#list-content table th, 
-#list-content table td {
+.list table th, 
+.list table td {
     text-align: center;
     vertical-align: middle;
 }
