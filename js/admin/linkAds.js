@@ -1,5 +1,10 @@
+import { linkedAds, updateAvailableAds } from "./singleContentWithAds.js";
+
 const backendAPI = 'https://streaming.test/api/';
 const authToken = localStorage.getItem('auth_token');
+const slug = localStorage.getItem('slug');
+const table = document.getElementById('ads-table');
+const unlinkMessage = document.getElementById('unlink-success-message');
 
 (function () {
   async function linkAds() {
@@ -66,11 +71,31 @@ const authToken = localStorage.getItem('auth_token');
 
           const data = await response.json();
 
-          // Mostrar mensaje de éxito
-          document.getElementById('link-success-message').style.display =
-            'block';
-          document.getElementById('link-success-message').textContent =
-            data.message || 'Anuncios vinculados correctamente!';
+          if (data.success) {
+            document.getElementById('link-success-message').style.display =
+              'block';
+            document.getElementById('link-success-message').textContent =
+              data.message || 'Anuncios vinculados correctamente!';
+
+            setTimeout(() => {
+              document.getElementById('link-success-message').style.display =
+                'none';
+            }, 5000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Actualizar la tabla de anuncios vinculados
+            const linkedResponse = await linkedAds(
+              slug,
+              backendAPI,
+              authToken,
+              table,
+              unlinkMessage
+            );
+            // Actualizar los checkboxes disponibles
+            await updateAvailableAds(slug, authToken, backendAPI);
+            // Resetear el formulario
+            document.getElementById('link-form').reset();
+          }
         } catch (error) {
           console.error('Error:', error);
 
@@ -100,8 +125,10 @@ const authToken = localStorage.getItem('auth_token');
       });
   }
 
-  async function loadInitialData(authToken) {
+  async function loadInitialData() {
     try {
+      const linkedAdIds = await linkedAds(slug, backendAPI, authToken, table, unlinkMessage);
+
       // Cargar anuncios
       const adsResponse = await fetch(backendAPI + 'ads', {
         headers: {
@@ -112,7 +139,12 @@ const authToken = localStorage.getItem('auth_token');
 
       if (adsData.success) {
         const adsContainer = document.getElementById('link-ads-container');
-        adsData.data.forEach((ad) => {
+
+        const unlinkedAds = adsData.data.filter(
+          (ad) => !linkedAdIds.includes(ad.id)
+        );
+
+        unlinkedAds.forEach((ad) => {
           const adGroup = document.createElement('div');
           adGroup.className = 'ad-group';
           adGroup.innerHTML = `

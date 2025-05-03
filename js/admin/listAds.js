@@ -123,9 +123,7 @@ import { deleteForm } from '../modules/deleteForm.js';
                             <td>${ad.brand}</td>
                             <td>${type}</td>
                             <td>${formatDuration(ad.duration)}</td>
-                            <td><img src="${cover}" alt="${
-              ad.title
-            }" class="cover-image"></td>
+                            <td>N/A</td>
                             <td>
                                 <div class="actions-container">
                                     <button class="actions-button ads-button">Acciones</button>
@@ -157,7 +155,10 @@ import { deleteForm } from '../modules/deleteForm.js';
                             <td>${ad.brand}</td>
                             <td>${type}</td>
                             <td>${formatDuration(ad.duration)}</td>
-                            <td>N/A</td>
+                            <td><img src="${cover}" alt="${
+              ad.title
+            }" class="cover-image"></td>
+                            
                             <td>
                                 <div class="actions-container">
                                     <button class="actions-button">Acciones</button>

@@ -57,7 +57,6 @@ import { deleteForm } from '../modules/deleteForm.js';
       }
       if (title) {
         localStorage.setItem('title', title);
-        console.log(title);
       }
       if (movieId) {
         localStorage.setItem('content_id', movieId);
