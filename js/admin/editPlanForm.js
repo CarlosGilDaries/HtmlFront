@@ -1,4 +1,6 @@
-const id = localStorage.getItem('plan-id');
+import { activeItems } from "../modules/activeItems.js";
+
+let id = localStorage.getItem('plan-id');
 const token = localStorage.getItem('auth_token');
 const backendAPI = 'https://streaming.test/api/';
 
@@ -26,6 +28,15 @@ async function loadContentData(id) {
 (function () {
   async function editPlansForm() {
     loadContentData(id);
+      const menuItems = document.querySelectorAll('.admin-menu li');
+      const contentContainers = document.querySelectorAll('.container');
+
+      menuItems.forEach((item) => {
+        item.addEventListener(
+          'click',
+          activeItems.bind(item, menuItems, contentContainers)
+        );
+      });
 
     document
       .getElementById('edit-plan-form')

@@ -2,16 +2,16 @@ import { deleteForm } from "../modules/deleteForm.js";
 import { activeItems } from "../modules/activeItems.js";
 
 (function () {
-  async function listPlans() {
-    const listContent = document.getElementById('list-plans');
-    const backendAPI = 'https://streaming.test/api/plans';
+  async function listGenders() {
+    const listContent = document.getElementById('list-genders');
+    const backendAPI = 'https://streaming.test/api/genders';
       const backendURL = 'https://streaming.test';
       const authToken = localStorage.getItem('auth_token');
-      const backendDeleteApi = 'https://streaming.test/api/delete-plan';
+      const backendDeleteApi = 'https://streaming.test/api/delete-gender';
 
     // Función para mostrar/ocultar menús de acciones
     function setupActionMenus() {
-      document.querySelectorAll('.plans-button').forEach((button) => {
+      document.querySelectorAll('.genders-button').forEach((button) => {
         button.addEventListener('click', function (e) {
           e.stopPropagation();
           const menu = this.nextElementSibling;
@@ -40,9 +40,14 @@ import { activeItems } from "../modules/activeItems.js";
     const contentContainers = document.querySelectorAll('.container');
 
     // Función para cargar y mostrar los datos
-    async function loadPlansList() {
+    async function loadGendersList() {
       try {
-        const response = await fetch(backendAPI);
+          const response = await fetch(backendAPI, {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              'Content-Type': 'application/json',
+            },
+          });
 
         const data = await response.json();
 
@@ -50,13 +55,13 @@ import { activeItems } from "../modules/activeItems.js";
           throw new Error(data.message);
         }
 
-        const plans = data.plans;
+          const genders = data.genders;
 
         // Generar HTML de la tabla
           let tableHTML = `
-                    <h1><i class="fas fa-eye"></i> Lista de Planes</h1>
-                    <div id="delete-plan-success-message" class="success-message" style="margin-bottom: 20px;">
-                      ¡Plan eliminado con éxito!
+                    <h1><i class="fas fa-eye"></i> Lista de Géneros</h1>
+                    <div id="delete-gender-success-message" class="success-message" style="margin-bottom: 20px;">
+                      ¡Género eliminado con éxito!
                     </div>    
                     <div class="table-responsive">
                         <table class="content-table">
@@ -64,45 +69,30 @@ import { activeItems } from "../modules/activeItems.js";
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre</th>
-                                    <th>Precio</th>
-                                    <th>Max Dispositivos</th>
-                                    <th>Max Streams</th>
-                                    <th>Anuncios</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                 `;
 
-        plans.forEach((plan) => {
-          let ads;
-
-          if (plan.ads == 1) {
-            ads = 'Sí';
-          } else {
-            ads = 'No';
-            }
-            
+        genders.forEach((gender) => {
+    
         tableHTML += ` 
                     <tr>
-                        <td>${plan.id}</td>
-                        <td>${plan.name}</td>
-                        <td>${plan.price}</td>
-                        <td>${plan.max_devices}</td>
-                        <td>${plan.max_streams}</td>
-                        <td>${ads}</td>
+                        <td>${gender.id}</td>
+                        <td>${gender.name}</td>
                         <td>
                             <div class="actions-container">
-                                <button class="actions-button plans-button">Acciones</button>
+                                <button class="actions-button genders-button">Acciones</button>
                                 <div class="actions-menu">
-                                    <button class="action-item edit-button plan-action" data-content="edit-plan" data-id="${
-                                        plan.id
-                                    }" data-script="/js/admin/editPlanForm.js">Editar</button>
-                                    <form class="plans-delete-form" data-id="${
-                                        plan.id
+                                    <button class="action-item edit-button gender-action" data-content="edit-gender" data-id="${
+                                        gender.id
+                                    }" data-script="/js/admin/editGenderForm.js">Editar</button>
+                                    <form class="gender-delete-form" data-id="${
+                                        gender.id
                                     }">
-                                    <input type="hidden" name="plan_id" value="${
-                                        plan.id
+                                    <input type="hidden" name="gender_id" value="${
+                                        gender.id
                                     }">
                                     <button class="action-item content-action delete-btn" type="submit">Eliminar</button>
                                     </form>
@@ -118,7 +108,7 @@ import { activeItems } from "../modules/activeItems.js";
                             </tbody>
                         </table>
                     </div>
-                    <button class="add-button" data-content="add-plan" data-script="/js/admin/addPlan.js">Añadir Plan</button>
+                    <button class="add-button" data-content="add-gender" data-script="/js/admin/addGender.js">Añadir Género</button>
                 `;
 
         // Insertar la tabla en el DOM
@@ -140,21 +130,26 @@ import { activeItems } from "../modules/activeItems.js";
           activeItemsEdit(this);
         })
 
-        const message = document.getElementById('delete-plan-success-message');
-        deleteForm(authToken, '.plans-delete-form', backendDeleteApi, message);
+        const message = document.getElementById('delete-gender-success-message');
+        deleteForm(authToken, '.gender-delete-form', backendDeleteApi, message);
       } catch (error) {
-        console.error('Error al cargar la lista de planes:', error);
+        console.error('Error al cargar la lista de géneros:', error);
         listContent.innerHTML = `
                     <div class="error-message">
-                        Error al cargar la lista de planes: ${error.message}
+                        Error al cargar la lista de géneros: ${error.message}
                     </div>
                 `;
       }
     }
 
     // Cargar los datos al iniciar
-    loadPlansList();
+    loadGendersList();
   }
 
-  listPlans();
+  // Verificar si el DOM está listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', listGenders);
+  } else {
+    listGenders();
+  }
 })();

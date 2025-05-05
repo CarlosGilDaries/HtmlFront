@@ -1,5 +1,6 @@
 import { formatDuration } from '../modules/formatDuration.js';
 import { deleteForm } from '../modules/deleteForm.js';
+import { activeItems } from '../modules/activeItems.js';
 
 (function () {
   async function listContent() {
@@ -38,44 +39,6 @@ import { deleteForm } from '../modules/deleteForm.js';
 
     const menuItems = document.querySelectorAll('.admin-menu li');
     const contentContainers = document.querySelectorAll('.container');
-    let currentScript = null;
-
-    function activeItemsEdit(element) {
-      menuItems.forEach((item) => item.classList.remove('active'));
-      element.classList.add('active');
-      contentContainers.forEach((container) =>
-        container.classList.add('hidden')
-      );
-      const contentId = element.getAttribute('data-content');
-      document.getElementById(contentId).classList.remove('hidden');
-
-      const slug = element.getAttribute('data-slug');
-      const title = element.getAttribute('data-title');
-      const movieId = element.getAttribute('data-id');
-      if (slug) {
-        localStorage.setItem('slug', slug);
-      }
-      if (title) {
-        localStorage.setItem('title', title);
-      }
-      if (movieId) {
-        localStorage.setItem('content_id', movieId);
-      }
-
-      const scriptUrl = element.getAttribute('data-script');
-      // Limpiar el script anterior si existe
-      if (currentScript) {
-        currentScript.remove();
-        currentScript = null;
-      }
-      // Cargar el nuevo script si está especificado
-      if (scriptUrl) {
-        currentScript = document.createElement('script');
-        currentScript.src = scriptUrl;
-        currentScript.type = 'module';
-        document.body.appendChild(currentScript);
-      }
-    }
 
     // Función para cargar y mostrar los datos
     async function loadContentList() {
@@ -187,10 +150,10 @@ import { deleteForm } from '../modules/deleteForm.js';
 
         // Añadir event listeners para los botones de acción
         document.querySelectorAll('.edit-button').forEach((btn) => {
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-              activeItemsEdit(btn);
-          });
+          btn.addEventListener(
+            'click',
+            activeItems.bind(btn, menuItems, contentContainers)
+          );
         });
 
         document.querySelectorAll('.link-button').forEach((btn) => {

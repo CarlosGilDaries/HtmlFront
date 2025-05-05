@@ -1,3 +1,5 @@
+import { activeItems } from "../modules/activeItems.js";
+
 let slug = localStorage.getItem('slug');
 const token = localStorage.getItem('auth_token');
 const backendAPI = 'https://streaming.test/api/';
@@ -80,6 +82,16 @@ async function loadContentData(slug) {
     }
 
     loadContentData(slug);
+      const menuItems = document.querySelectorAll('.admin-menu li');
+      const contentContainers = document.querySelectorAll('.container');
+
+      menuItems.forEach((item) => {
+        item.addEventListener(
+          'click',
+          activeItems.bind(item, menuItems, contentContainers)
+        );
+      });
+    
     document
       .getElementById('edit-content-pay_per_view')
       .addEventListener('change', function () {
@@ -212,6 +224,10 @@ async function loadContentData(slug) {
         } finally {
           document.getElementById('edit-content-loading').style.display = 'none';
         }
+      });
+
+      menuItems.forEach((item) => {
+        item.addEventListener('click', activeItems);
       });
   }
 
